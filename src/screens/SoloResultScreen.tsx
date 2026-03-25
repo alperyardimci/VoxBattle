@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -6,9 +6,13 @@ import {
   StyleSheet,
   Animated,
   Dimensions,
+  ScrollView,
 } from "react-native";
+import * as Speech from "expo-speech";
+import { useAudioPlayer } from "expo-audio";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
+import { RootStackParamList, WordResult } from "../types";
+import { getLocaleForLanguage } from "../services/speechService";
 import Twemoji from "../components/Twemoji";
 
 type Props = NativeStackScreenProps<RootStackParamList, "SoloResult">;
@@ -23,17 +27,14 @@ function getRank(pct: number) {
 }
 
 export default function SoloResultScreen({ route, navigation }: Props) {
-  const { score, total, difficulty } = route.params;
+  const { score, total, difficulty, wordResults } = route.params;
   const pct = Math.round((score / total) * 100);
   const rank = getRank(pct);
   const diffLabel = difficulty === "easy" ? "Kolay" : difficulty === "medium" ? "Orta" : "Zor";
+  const [speakingId, setSpeakingId] = useState<string | null>(null);
 
   const cardScale = useRef(new Animated.Value(0)).current;
   const emojiScale = useRef(new Animated.Value(0)).current;
-  const barWidth = useRef(new Animated.Value(0)).current;
-  const btn1 = useRef(new Animated.Value(0)).current;
-  const btn2 = useRef(new Animated.Value(0)).current;
-  const btn3 = useRef(new Animated.Value(0)).current;
   const confetti = useRef(
     Array.from({ length: 16 }, () => ({
       x: new Animated.Value(Math.random() * SCREEN_WIDTH),
@@ -49,15 +50,6 @@ export default function SoloResultScreen({ route, navigation }: Props) {
       Animated.spring(emojiScale, { toValue: 1, friction: 3, tension: 80, useNativeDriver: true }),
     ]).start();
 
-    Animated.timing(barWidth, { toValue: pct / 100, duration: 1500, useNativeDriver: false }).start();
-
-    Animated.stagger(150, [
-      Animated.spring(btn1, { toValue: 1, friction: 5, useNativeDriver: true }),
-      Animated.spring(btn2, { toValue: 1, friction: 5, useNativeDriver: true }),
-      Animated.spring(btn3, { toValue: 1, friction: 5, useNativeDriver: true }),
-    ]).start();
-
-    // Confetti
     if (pct >= 50) {
       confetti.forEach((c, i) => {
         Animated.loop(
@@ -79,8 +71,25 @@ export default function SoloResultScreen({ route, navigation }: Props) {
     }
   }, []);
 
+  const speakWord = (result: WordResult) => {
+    if (speakingId === result.word.id) {
+      Speech.stop();
+      setSpeakingId(null);
+      return;
+    }
+    setSpeakingId(result.word.id);
+    const locale = getLocaleForLanguage(result.word.language);
+    Speech.speak(result.word.word, {
+      language: locale,
+      rate: 0.8,
+      onDone: () => setSpeakingId(null),
+      onStopped: () => setSpeakingId(null),
+      onError: () => setSpeakingId(null),
+    });
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
       {/* Confetti */}
       {pct >= 50 &&
         confetti.map((c, i) => (
@@ -92,255 +101,306 @@ export default function SoloResultScreen({ route, navigation }: Props) {
               height: 8,
               borderRadius: i % 2 === 0 ? 4 : 1,
               backgroundColor: ["#e94560", "#4CAF50", "#FF9800", "#2196F3", "#FFD700"][i % 5],
-              transform: [
-                { translateX: c.x },
-                { translateY: c.y },
-                {
-                  rotate: c.rot.interpolate({
-                    inputRange: [0, 360],
-                    outputRange: ["0deg", "360deg"],
-                  }),
-                },
-              ],
+              transform: [{ translateX: c.x }, { translateY: c.y }, {
+                rotate: c.rot.interpolate({ inputRange: [0, 360], outputRange: ["0deg", "360deg"] }),
+              }],
               opacity: c.opacity,
             }}
           />
         ))}
 
-      {/* Card */}
-      <Animated.View style={[styles.card, { transform: [{ scale: cardScale }] }]}>
-        <Animated.View style={{ transform: [{ scale: emojiScale }], marginBottom: 8 }}>
-          <Twemoji emoji={rank.emoji} size={72} />
+      {/* Compact Score Header */}
+      <Animated.View style={[styles.scoreHeader, { transform: [{ scale: cardScale }] }]}>
+        <Animated.View style={{ transform: [{ scale: emojiScale }] }}>
+          <Twemoji emoji={rank.emoji} size={36} />
         </Animated.View>
-
         <Text style={[styles.rankLabel, { color: rank.color }]}>{rank.label}</Text>
-
-        <View style={styles.scoreRow}>
-          <Text style={styles.scoreVal}>{score}</Text>
-          <Text style={styles.scoreSep}>/</Text>
-          <Text style={styles.scoreTotal}>{total}</Text>
-        </View>
-
-        <Text style={styles.pctText}>%{pct} Başarı</Text>
-
-        {/* Progress bar */}
-        <View style={styles.barOuter}>
-          <Animated.View
-            style={[
-              styles.barInner,
-              {
-                width: barWidth.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ["0%", "100%"],
-                }),
-                backgroundColor: rank.color,
-              },
-            ]}
-          />
-        </View>
-
-        {/* Stats */}
-        <View style={styles.statsWrap}>
-          <View style={styles.statRow}>
-            <View style={styles.statLeft}>
-              <Twemoji emoji="📊" size={16} />
-              <Text style={styles.statLabel}> Zorluk</Text>
-            </View>
-            <Text style={styles.statVal}>{diffLabel}</Text>
-          </View>
-          <View style={styles.statRow}>
-            <View style={styles.statLeft}>
-              <Twemoji emoji="✅" size={16} />
-              <Text style={styles.statLabel}> Doğru</Text>
-            </View>
-            <Text style={[styles.statVal, { color: "#4CAF50" }]}>{score}</Text>
-          </View>
-          <View style={styles.statRow}>
-            <View style={styles.statLeft}>
-              <Twemoji emoji="❌" size={16} />
-              <Text style={styles.statLabel}> Yanlış</Text>
-            </View>
-            <Text style={[styles.statVal, { color: "#F44336" }]}>{total - score}</Text>
-          </View>
-        </View>
+        <Text style={styles.scoreInline}>{score}/{total}</Text>
       </Animated.View>
 
+      {/* Word Results */}
+      <View style={styles.wordListCard}>
+        <Text style={styles.wordListTitle}>KELİME DETAYLARI</Text>
+        {wordResults.map((result, i) => (
+          <View
+            key={result.word.id}
+            style={[
+              styles.wordRow,
+              i < wordResults.length - 1 && styles.wordRowBorder,
+            ]}
+          >
+            <View style={styles.wordRowLeft}>
+              <View style={[
+                styles.resultBadge,
+                { backgroundColor: result.correct ? "rgba(76,175,80,0.15)" : "rgba(244,67,54,0.15)" }
+              ]}>
+                <Twemoji emoji={result.correct ? "✅" : "❌"} size={16} />
+              </View>
+              <View style={styles.wordInfo}>
+                <View style={styles.wordTopRow}>
+                  <Twemoji emoji={result.word.countryFlag} size={16} />
+                  <Text style={styles.wordName}> {result.word.word}</Text>
+                </View>
+                <Text style={styles.wordPronunciation}>
+                  [ {result.word.pronunciation} ]
+                </Text>
+                {result.spokenText ? (
+                  <Text style={styles.wordSpoken}>
+                    Söylenen: "{result.spokenText}"
+                  </Text>
+                ) : (
+                  <Text style={styles.wordSkipped}>Süre doldu / Geçildi</Text>
+                )}
+              </View>
+            </View>
+
+            <View style={styles.audioBtns}>
+              {result.audioUri ? (
+                <MyVoiceButton audioUri={result.audioUri} wordId={result.word.id} />
+              ) : result.spokenText ? (
+                <View style={[styles.speakerBtn, { opacity: 0.3 }]}>
+                  <Twemoji emoji="🎤" size={18} />
+                </View>
+              ) : null}
+              <TouchableOpacity
+                style={[
+                  styles.speakerBtn,
+                  speakingId === result.word.id && styles.speakerBtnActive,
+                ]}
+                onPress={() => speakWord(result)}
+                activeOpacity={0.7}
+              >
+                <Twemoji emoji={speakingId === result.word.id ? "⏹️" : "🔊"} size={18} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))}
+      </View>
+
       {/* Buttons */}
-      <Animated.View
-        style={{ opacity: btn1, transform: [{ scale: btn1 }], width: "100%" }}
-      >
+      <View style={styles.btnGroup}>
         <TouchableOpacity
-          style={styles.primaryBtn}
+          style={[styles.btn, styles.btnPrimary]}
           onPress={() => navigation.replace("SoloGame", { difficulty })}
           activeOpacity={0.75}
         >
-          <Twemoji emoji="🔄" size={22} />
-          <Text style={styles.primaryText}> Tekrar Dene</Text>
+          <Twemoji emoji="🔄" size={20} />
+          <Text style={[styles.btnText, styles.btnTextPrimary]}> Tekrar Dene</Text>
         </TouchableOpacity>
-      </Animated.View>
 
-      <Animated.View
-        style={{ opacity: btn2, transform: [{ scale: btn2 }], width: "100%" }}
-      >
         <TouchableOpacity
-          style={styles.secondaryBtn}
+          style={[styles.btn, styles.btnSecondary]}
           onPress={() => navigation.replace("ModeSelect", { difficulty })}
-          activeOpacity={0.7}
+          activeOpacity={0.75}
         >
-          <Twemoji emoji="🎮" size={18} />
-          <Text style={styles.secondaryText}> Mod Seç</Text>
+          <Twemoji emoji="🎮" size={20} />
+          <Text style={[styles.btnText, styles.btnTextSecondary]}> Mod Seç</Text>
         </TouchableOpacity>
-      </Animated.View>
 
-      <Animated.View style={{ opacity: btn3, transform: [{ scale: btn3 }] }}>
         <TouchableOpacity
-          style={styles.tertiaryBtn}
+          style={[styles.btn, styles.btnSecondary]}
           onPress={() => navigation.replace("Home")}
-          activeOpacity={0.7}
+          activeOpacity={0.75}
         >
-          <Twemoji emoji="🏠" size={16} />
-          <Text style={styles.tertiaryText}> Ana Menü</Text>
+          <Twemoji emoji="🏠" size={20} />
+          <Text style={[styles.btnText, styles.btnTextSecondary]}> Ana Menü</Text>
         </TouchableOpacity>
-      </Animated.View>
-    </View>
+      </View>
+
+      <View style={{ height: 40 }} />
+    </ScrollView>
+  );
+}
+
+function MyVoiceButton({ audioUri, wordId }: { audioUri: string; wordId: string }) {
+  const player = useAudioPlayer(audioUri);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const toggle = () => {
+    if (isPlaying) {
+      player.pause();
+      player.seekTo(0);
+      setIsPlaying(false);
+    } else {
+      player.seekTo(0);
+      player.play();
+      setIsPlaying(true);
+      // Auto-stop after playback
+      const checkDone = setInterval(() => {
+        if (!player.playing) {
+          setIsPlaying(false);
+          clearInterval(checkDone);
+        }
+      }, 300);
+    }
+  };
+
+  return (
+    <TouchableOpacity
+      style={[styles.speakerBtn, isPlaying && styles.speakerBtnActive]}
+      onPress={toggle}
+      activeOpacity={0.7}
+    >
+      <Twemoji emoji={isPlaying ? "⏹️" : "🎤"} size={18} />
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  scrollContainer: {
     flex: 1,
     backgroundColor: "#0a0a1a",
+  },
+  container: {
     alignItems: "center",
-    justifyContent: "center",
     paddingHorizontal: 20,
+    paddingTop: 60,
   },
-  card: {
-    backgroundColor: "rgba(255,255,255,0.06)",
-    borderRadius: 28,
-    padding: 28,
-    width: "100%",
-    alignItems: "center",
-    borderWidth: 1.5,
-    borderColor: "rgba(233,69,96,0.2)",
-    marginBottom: 24,
-    shadowColor: "#e94560",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 20,
-  },
-  rankLabel: {
-    fontSize: 28,
-    fontWeight: "900",
-    marginBottom: 12,
-    letterSpacing: 1,
-  },
-  scoreRow: {
-    flexDirection: "row",
-    alignItems: "baseline",
-    marginBottom: 4,
-  },
-  scoreVal: {
-    fontSize: 60,
-    fontWeight: "900",
-    color: "#fff",
-  },
-  scoreSep: {
-    fontSize: 34,
-    color: "#333",
-    marginHorizontal: 6,
-  },
-  scoreTotal: {
-    fontSize: 34,
-    color: "#555",
-    fontWeight: "700",
-  },
-  pctText: {
-    fontSize: 16,
-    color: "#666",
-    marginBottom: 16,
-  },
-  barOuter: {
-    width: "100%",
-    height: 12,
-    backgroundColor: "rgba(255,255,255,0.08)",
-    borderRadius: 6,
-    marginBottom: 20,
-    overflow: "hidden",
-  },
-  barInner: {
-    height: "100%",
-    borderRadius: 6,
-  },
-  statsWrap: {
-    width: "100%",
-    borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.06)",
-    paddingTop: 14,
-  },
-  statRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 5,
-  },
-  statLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  statLabel: {
-    fontSize: 14,
-    color: "#666",
-  },
-  statVal: {
-    fontSize: 15,
-    color: "#fff",
-    fontWeight: "700",
-  },
-  primaryBtn: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#e94560",
-    borderRadius: 18,
-    paddingVertical: 16,
-    marginBottom: 10,
-    shadowColor: "#e94560",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    elevation: 6,
-  },
-  primaryText: {
-    fontSize: 19,
-    fontWeight: "800",
-    color: "#fff",
-  },
-  secondaryBtn: {
+  scoreHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "rgba(255,255,255,0.06)",
     borderRadius: 16,
-    paddingVertical: 14,
-    marginBottom: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    width: "100%",
+    marginBottom: 16,
     borderWidth: 1,
-    borderColor: "rgba(233,69,96,0.2)",
+    borderColor: "rgba(255,255,255,0.08)",
+    gap: 12,
   },
-  secondaryText: {
+  rankLabel: {
+    fontSize: 20,
+    fontWeight: "900",
+  },
+  scoreInline: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#fff",
+  },
+
+  // Word list
+  wordListCard: {
+    backgroundColor: "rgba(255,255,255,0.04)",
+    borderRadius: 20,
+    padding: 16,
+    width: "100%",
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.06)",
+  },
+  wordListTitle: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: "#555",
+    letterSpacing: 3,
+    textAlign: "center",
+    marginBottom: 12,
+  },
+  wordRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+  },
+  wordRowBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255,255,255,0.04)",
+  },
+  wordRowLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  resultBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
+  },
+  wordInfo: {
+    flex: 1,
+  },
+  wordTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  wordName: {
     fontSize: 16,
-    color: "#e94560",
     fontWeight: "700",
+    color: "#fff",
   },
-  tertiaryBtn: {
+  wordPronunciation: {
+    fontSize: 12,
+    color: "#e94560",
+    fontStyle: "italic",
+    marginTop: 1,
+  },
+  wordSpoken: {
+    fontSize: 11,
+    color: "#666",
+    marginTop: 1,
+  },
+  wordSkipped: {
+    fontSize: 11,
+    color: "#555",
+    fontStyle: "italic",
+    marginTop: 1,
+  },
+  audioBtns: {
+    flexDirection: "row",
+    gap: 6,
+    marginLeft: 6,
+  },
+  speakerBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(255,255,255,0.06)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 8,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
+  },
+  speakerBtnActive: {
+    backgroundColor: "rgba(233,69,96,0.2)",
+    borderColor: "rgba(233,69,96,0.4)",
+  },
+
+  // Buttons
+  btnGroup: {
+    width: "100%",
+    gap: 10,
+    marginBottom: 10,
+  },
+  btn: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+    borderRadius: 16,
+    paddingVertical: 15,
+    width: "100%",
   },
-  tertiaryText: {
-    fontSize: 15,
-    color: "#555",
-    fontWeight: "600",
+  btnPrimary: {
+    backgroundColor: "#e94560",
+  },
+  btnSecondary: {
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.1)",
+  },
+  btnText: {
+    fontSize: 17,
+    fontWeight: "700",
+  },
+  btnTextPrimary: {
+    color: "#fff",
+  },
+  btnTextSecondary: {
+    color: "#888",
   },
 });

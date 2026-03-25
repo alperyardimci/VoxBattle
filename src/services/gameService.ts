@@ -6,9 +6,6 @@ import {
   update,
   remove,
   get,
-  query,
-  orderByChild,
-  equalTo,
   off,
 } from "firebase/database";
 import { db } from "../config/firebase";
@@ -60,25 +57,31 @@ export async function findOrCreateRoom(
   playerName: string,
   difficulty: Difficulty
 ): Promise<{ roomId: string; isHost: boolean }> {
-  const lobbyQuery = query(
-    ref(db, LOBBY_REF),
-    orderByChild("status"),
-    equalTo("waiting")
-  );
-
-  const snapshot = await get(lobbyQuery);
+  const lobbyRef = ref(db, LOBBY_REF);
+  const snapshot = await get(lobbyRef);
 
   if (snapshot.exists()) {
-    const rooms = snapshot.val();
-    // Find a room with matching difficulty that isn't ours
-    for (const [roomId, room] of Object.entries(rooms) as [string, LobbyRoom][]) {
-      if (room.difficulty === difficulty && room.hostId !== playerId) {
+    const rooms = snapshot.val() as Record<string, LobbyRoom>;
+    // Find a room with matching difficulty that isn't ours and is waiting
+    for (const [roomId, room] of Object.entries(rooms)) {
+      if (
+        room.status === "waiting" &&
+        room.difficulty === difficulty &&
+        room.hostId !== playerId
+      ) {
         // Join this room
         await update(ref(db, `${LOBBY_REF}/${roomId}`), {
           status: "full",
         });
         // Create game
-        await createGame(roomId, room.hostId, room.hostName, playerId, playerName, difficulty);
+        await createGame(
+          roomId,
+          room.hostId,
+          room.hostName,
+          playerId,
+          playerName,
+          difficulty
+        );
         return { roomId, isHost: false };
       }
     }
@@ -161,13 +164,11 @@ export async function handlePronunciation(
   const otherPlayerId = playerIds.find((id) => id !== playerId)!;
 
   if (isCorrect) {
-    // Correct: add point, move to next word
     const newScore = (game.players[playerId]?.score || 0) + 1;
     const newWordIndex = game.currentWordIndex + 1;
     const newRound = game.round + 1;
 
     if (newWordIndex >= game.words.length || newRound > game.maxRounds) {
-      // Game over
       const p1Id = playerIds[0];
       const p2Id = playerIds[1];
       const p1Score = p1Id === playerId ? newScore : game.players[p1Id].score;
@@ -176,24 +177,102 @@ export async function handlePronunciation(
 
       await update(gameRef, {
         [`players/${playerId}/score`]: newScore,
+        [`wordOutcomes/${game.currentWordIndex}`]: { answeredBy: playerId },
+        currentWordIndex: newWordIndex,
+        status: "finished",
+        winner,
+        skipVotes: null,
+      });
+    } else {
+      await update(gameRef, {
+        [`players/${playerId}/score`]: newScore,
+        [`wordOutcomes/${game.currentWordIndex}`]: { answeredBy: playerId },
+        currentWordIndex: newWordIndex,
+        round: newRound,
+        currentTurn: playerId,
+        skipVotes: null,
+      });
+    }
+  } else {
+    // Wrong: turn passes to opponent, same word, reset skip votes
+    await update(gameRef, {
+      currentTurn: otherPlayerId,
+      skipVotes: null,
+    });
+  }
+}
+
+// Vote to skip current word
+// First vote: turn passes to opponent. If both vote: word is skipped entirely.
+export async function voteSkipWord(
+  gameId: string,
+  playerId: string
+): Promise<void> {
+  const gameRef = ref(db, `${GAMES_REF}/${gameId}`);
+  const snapshot = await get(gameRef);
+  const game: GameState = snapshot.val();
+
+  if (!game || game.status !== "playing") return;
+
+  const skipVotes = game.skipVotes || {};
+  skipVotes[playerId] = true;
+
+  const playerIds = Object.keys(game.players);
+  const otherPlayerId = playerIds.find((id) => id !== playerId)!;
+  const allVoted = playerIds.every((id) => skipVotes[id]);
+
+  if (allVoted) {
+    // Both voted skip - skip word entirely
+    const newWordIndex = game.currentWordIndex + 1;
+    const newRound = game.round + 1;
+
+    if (newWordIndex >= game.words.length || newRound > game.maxRounds) {
+      const p1Id = playerIds[0];
+      const p2Id = playerIds[1];
+      const winner =
+        game.players[p1Id].score > game.players[p2Id].score
+          ? p1Id
+          : game.players[p2Id].score > game.players[p1Id].score
+          ? p2Id
+          : "draw";
+
+      await update(gameRef, {
+        skipVotes: null,
+        [`wordOutcomes/${game.currentWordIndex}`]: { answeredBy: null, skipped: true },
         currentWordIndex: newWordIndex,
         status: "finished",
         winner,
       });
     } else {
       await update(gameRef, {
-        [`players/${playerId}/score`]: newScore,
+        skipVotes: null,
+        [`wordOutcomes/${game.currentWordIndex}`]: { answeredBy: null, skipped: true },
         currentWordIndex: newWordIndex,
         round: newRound,
-        currentTurn: playerId, // correct answer: same player continues
+        currentTurn: otherPlayerId,
       });
     }
   } else {
-    // Wrong: turn passes to opponent, same word
+    // Only one voted - pass turn to opponent
     await update(gameRef, {
+      skipVotes,
       currentTurn: otherPlayerId,
     });
   }
+}
+
+// Create a bot game when no opponent is found after timeout
+export async function createBotGame(
+  roomId: string,
+  playerId: string,
+  playerName: string,
+  difficulty: Difficulty
+): Promise<void> {
+  const botId = "bot_" + Math.random().toString(36).substr(2, 9);
+  const botName = "VoxBot";
+
+  await update(ref(db, `${LOBBY_REF}/${roomId}`), { status: "full" });
+  await createGame(roomId, playerId, playerName, botId, botName, difficulty);
 }
 
 // Clean up room from lobby

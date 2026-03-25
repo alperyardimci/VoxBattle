@@ -14,7 +14,6 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
   const titleAnim = useRef(new Animated.Value(0)).current;
   const soloAnim = useRef(new Animated.Value(0)).current;
   const onlineAnim = useRef(new Animated.Value(0)).current;
-  const backAnim = useRef(new Animated.Value(0)).current;
   const floatAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -22,7 +21,6 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
       Animated.spring(titleAnim, { toValue: 1, friction: 5, tension: 60, useNativeDriver: true }),
       Animated.spring(soloAnim, { toValue: 1, friction: 5, tension: 50, useNativeDriver: true }),
       Animated.spring(onlineAnim, { toValue: 1, friction: 5, tension: 50, useNativeDriver: true }),
-      Animated.timing(backAnim, { toValue: 1, duration: 400, useNativeDriver: true }),
     ]).start();
 
     Animated.loop(
@@ -109,7 +107,7 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
       </Animated.View>
 
       {/* Back */}
-      <Animated.View style={{ opacity: backAnim, marginTop: 24 }}>
+      <View style={{ marginTop: 24 }}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}
@@ -118,7 +116,7 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
           <Twemoji emoji="◀️" size={16} />
           <Text style={styles.backText}> Geri Dön</Text>
         </TouchableOpacity>
-      </Animated.View>
+      </View>
     </View>
   );
 }

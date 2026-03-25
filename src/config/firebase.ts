@@ -2,15 +2,15 @@ import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
-// TODO: Replace with your actual Firebase config from Firebase Console
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "voxbattle.firebaseapp.com",
-  databaseURL: "https://voxbattle-default-rtdb.firebaseio.com",
-  projectId: "voxbattle",
-  storageBucket: "voxbattle.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyBrp4kcgjuUJLQ5KLt0rberGRCIIBcy-x4",
+  authDomain: "voxbattle-8d0c0.firebaseapp.com",
+  databaseURL:
+    "https://voxbattle-8d0c0-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "voxbattle-8d0c0",
+  storageBucket: "voxbattle-8d0c0.firebasestorage.app",
+  messagingSenderId: "1008316824962",
+  appId: "1:1008316824962:ios:00e2be77a8f52f56de239b",
 };
 
 const app = initializeApp(firebaseConfig);

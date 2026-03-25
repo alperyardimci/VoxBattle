@@ -12,11 +12,14 @@
       "backgroundColor": "#0a0a1a"
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.alperyardimci.VoxBattle",
+      "buildNumber": "4",
       "infoPlist": {
-        "NSSpeechRecognitionUsageDescription": "Telaffuz ettiginiz kelimeleri degerlendirmek icin konusma tanima kullanilmaktadir.",
-        "NSMicrophoneUsageDescription": "Telaffuzunuzu dinlemek icin mikrofon erisimi gerekmektedir."
+        "NSSpeechRecognitionUsageDescription": "Telaffuz ettiğiniz kelimeleri değerlendirmek için konuşma tanıma kullanılmaktadır.",
+        "NSMicrophoneUsageDescription": "Telaffuzunuzu dinlemek için mikrofon erişimi gerekmektedir.",
+        "NSPhotoLibraryUsageDescription": "Bu uygulama fotoğraf kitaplığınıza erişim gerektirmez.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -26,7 +29,13 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,10 +45,23 @@
       [
         "expo-speech-recognition",
         {
-          "microphonePermission": "Telaffuzunuzu dinlemek icin mikrofon erisimi gerekmektedir.",
-          "speechRecognitionPermission": "Telaffuz ettiginiz kelimeleri degerlendirmek icin konusma tanima kullanilmaktadir."
+          "microphonePermission": "Telaffuzunuzu dinlemek için mikrofon erişimi gerekmektedir.",
+          "speechRecognitionPermission": "Telaffuz ettiğiniz kelimeleri değerlendirmek için konuşma tanıma kullanılmaktadır."
+        }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "iosAppId": "ca-app-pub-5385502180411655~8944959676",
+          "androidAppId": "ca-app-pub-5385502180411655~8944959676"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b1c53b43-f226-4bfa-b2b4-0be77c88d787"
+      }
+    },
+    "owner": "alperyardimci"
   }
 }

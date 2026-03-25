@@ -179,14 +179,35 @@ export default function HomeScreen({ navigation }: Props) {
       </View>
 
       {/* How to Play */}
-      <Animated.View style={[styles.howToPlay, { opacity: footerAnim }]}>
-        <View style={styles.howToPlayRow}>
-          <Twemoji emoji="🌍" size={16} />
-          <Text style={styles.howToPlayText}> Kelimeyi gör</Text>
-          <Twemoji emoji="🎙️" size={16} />
-          <Text style={styles.howToPlayText}> Telaffuz et</Text>
-          <Twemoji emoji="🎯" size={16} />
-          <Text style={styles.howToPlayText}> Puan kazan!</Text>
+      <Animated.View style={[styles.htpCard, { opacity: footerAnim }]}>
+        <Text style={styles.htpTitle}>NASIL OYNANIR?</Text>
+        <View style={styles.htpSteps}>
+          <View style={styles.htpStep}>
+            <View style={styles.htpIconWrap}>
+              <Twemoji emoji="🌍" size={20} />
+            </View>
+            <View style={styles.htpNumBadge}><Text style={styles.htpNum}>1</Text></View>
+            <Text style={styles.htpLabel}>Kelimeyi Gör</Text>
+            <Text style={styles.htpDesc}>Farklı ülkelerden kelimeler ekrana gelir</Text>
+          </View>
+          <View style={styles.htpDivider} />
+          <View style={styles.htpStep}>
+            <View style={styles.htpIconWrap}>
+              <Twemoji emoji="🎙️" size={20} />
+            </View>
+            <View style={styles.htpNumBadge}><Text style={styles.htpNum}>2</Text></View>
+            <Text style={styles.htpLabel}>Telaffuz Et</Text>
+            <Text style={styles.htpDesc}>Mikrofona doğru telaffuz etmeye çalış</Text>
+          </View>
+          <View style={styles.htpDivider} />
+          <View style={styles.htpStep}>
+            <View style={styles.htpIconWrap}>
+              <Twemoji emoji="🏆" size={20} />
+            </View>
+            <View style={styles.htpNumBadge}><Text style={styles.htpNum}>3</Text></View>
+            <Text style={styles.htpLabel}>Kazan!</Text>
+            <Text style={styles.htpDesc}>Doğru telaffuz et, puan topla, zirveye çık</Text>
+          </View>
         </View>
       </Animated.View>
     </View>
@@ -286,24 +307,70 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     marginTop: -2,
   },
-  howToPlay: {
+  htpCard: {
     width: "100%",
-    backgroundColor: "rgba(255,255,255,0.04)",
-    borderRadius: 14,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
+    backgroundColor: "rgba(255,255,255,0.03)",
+    borderRadius: 18,
+    padding: 16,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
-  howToPlayRow: {
+  htpTitle: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: "#444",
+    letterSpacing: 3,
+    textAlign: "center",
+    marginBottom: 14,
+  },
+  htpSteps: {
     flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  htpStep: {
+    flex: 1,
+    alignItems: "center",
+  },
+  htpIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(233,69,96,0.1)",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 6,
   },
-  howToPlayText: {
-    fontSize: 13,
-    color: "#666",
-    fontWeight: "600",
-    marginRight: 8,
+  htpNumBadge: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 4,
+  },
+  htpNum: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: "#555",
+  },
+  htpLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: "#aaa",
+    marginBottom: 2,
+    textAlign: "center",
+  },
+  htpDesc: {
+    fontSize: 10,
+    color: "#555",
+    textAlign: "center",
+    lineHeight: 13,
+  },
+  htpDivider: {
+    width: 1,
+    height: 50,
+    backgroundColor: "rgba(255,255,255,0.06)",
+    marginTop: 14,
   },
 });

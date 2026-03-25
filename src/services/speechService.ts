@@ -8,15 +8,79 @@ export async function requestMicrophonePermission(): Promise<boolean> {
   return result.granted;
 }
 
-export async function startListening(_lang: string = "en-US"): Promise<void> {
-  // Always use en-US: accepted pronunciations are romanized Latin text,
-  // so native locales (ar-SA, ru-RU, etc.) would return native script
-  // that never matches our Latin-based accepted list.
-  ExpoSpeechRecognitionModule.start({
-    lang: "en-US",
+// Only languages confirmed to work on iOS STT
+const NATIVE_LOCALE_LANGUAGES: Record<string, string> = {
+  Turkish: "tr-TR",
+  Spanish: "es-ES",
+  French: "fr-FR",
+  German: "de-DE",
+  Italian: "it-IT",
+  Japanese: "ja-JP",
+  Portuguese: "pt-BR",
+  Korean: "ko-KR",
+  Chinese: "zh-CN",
+  Russian: "ru-RU",
+  Arabic: "ar-SA",
+  Hindi: "hi-IN",
+  Czech: "cs-CZ",
+  Danish: "da-DK",
+  Polish: "pl-PL",
+  Hungarian: "hu-HU",
+  Finnish: "fi-FI",
+  Thai: "th-TH",
+  Dutch: "nl-NL",
+  Swedish: "sv-SE",
+  Norwegian: "nb-NO",
+  Greek: "el-GR",
+  Romanian: "ro-RO",
+  Croatian: "hr-HR",
+  Vietnamese: "vi-VN",
+  Indonesian: "id-ID",
+  Malay: "ms-MY",
+  Hebrew: "he-IL",
+  Catalan: "ca-ES",
+};
+// NOT supported on iOS STT (fallback to en-US):
+// Bulgarian, Serbian, Ukrainian, Slovak, Slovenian,
+// Latvian, Lithuanian, Estonian, Filipino, Persian
+
+// Languages where STT doesn't exist or is poor - fallback to en-US
+// Welsh, Irish, Scottish Gaelic, Xhosa, Navajo, Maori, Swahili,
+// Hawaiian, Quechua, Tongan, etc.
+
+export function getLocaleForLanguage(language: string): string {
+  return NATIVE_LOCALE_LANGUAGES[language] || "en-US";
+}
+
+export function isNativeLocaleLanguage(language: string): boolean {
+  return language in NATIVE_LOCALE_LANGUAGES;
+}
+
+let currentLang = "en-US";
+
+export async function startListening(lang: string = "en-US", persistAudio: boolean = false): Promise<void> {
+  currentLang = lang;
+  const opts: any = {
+    lang,
     interimResults: true,
     maxAlternatives: 3,
-  });
+  };
+  if (persistAudio) {
+    opts.recordingOptions = { persist: true };
+  }
+  try {
+    ExpoSpeechRecognitionModule.start(opts);
+  } catch {
+    if (lang !== "en-US") {
+      currentLang = "en-US";
+      opts.lang = "en-US";
+      ExpoSpeechRecognitionModule.start(opts);
+    }
+  }
+}
+
+export function getCurrentLang(): string {
+  return currentLang;
 }
 
 export function stopListening(): void {
@@ -27,20 +91,20 @@ export { useSpeechRecognitionEvent };
 
 export function checkPronunciation(
   spokenText: string,
-  acceptedPronunciations: string[]
+  acceptedPronunciations: string[],
+  language?: string
 ): boolean {
-  const normalizedSpoken = spokenText
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z\s]/g, "");
-
+  const normalizedSpoken = normalizeText(spokenText);
   if (!normalizedSpoken) return false;
 
+  // Native locale languages get strict matching,
+  // en-US fallback languages get relaxed matching
+  const isNative = language ? language in NATIVE_LOCALE_LANGUAGES : true;
+  const threshold = isNative ? 0.75 : 0.55;
+
   for (const accepted of acceptedPronunciations) {
-    const normalizedAccepted = accepted
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z\s]/g, "");
+    const normalizedAccepted = normalizeText(accepted);
+    if (!normalizedAccepted) continue;
 
     if (normalizedSpoken === normalizedAccepted) return true;
 
@@ -49,38 +113,23 @@ export function checkPronunciation(
     if (maxLen === 0) continue;
     const similarity = 1 - distance / maxLen;
 
-    if (similarity >= 0.75) return true;
+    if (similarity >= threshold) return true;
   }
 
   return false;
 }
 
-// Map language names to BCP-47 locale codes for speech recognition
-export function getLocaleForLanguage(language: string): string {
-  const localeMap: Record<string, string> = {
-    Turkish: "tr-TR",
-    Spanish: "es-ES",
-    French: "fr-FR",
-    German: "de-DE",
-    Italian: "it-IT",
-    Japanese: "ja-JP",
-    Portuguese: "pt-BR",
-    Korean: "ko-KR",
-    Chinese: "zh-CN",
-    Russian: "ru-RU",
-    Arabic: "ar-SA",
-    Hindi: "hi-IN",
-    Czech: "cs-CZ",
-    Welsh: "cy-GB",
-    Danish: "da-DK",
-    Polish: "pl-PL",
-    Hungarian: "hu-HU",
-    Icelandic: "is-IS",
-    Finnish: "fi-FI",
-    Thai: "th-TH",
-    Irish: "ga-IE",
-  };
-  return localeMap[language] || "en-US";
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    // Remove diacritics/accents for comparison
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    // Keep letters (including non-latin), digits and spaces
+    .replace(/[^\p{L}\p{N}\s]/gu, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function levenshteinDistance(a: string, b: string): number {

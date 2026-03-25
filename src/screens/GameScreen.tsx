@@ -15,6 +15,7 @@ import {
   subscribeToGame,
   handlePronunciation,
   forfeitGame,
+  voteSkipWord,
 } from "../services/gameService";
 import {
   checkPronunciation,
@@ -22,8 +23,10 @@ import {
   stopListening,
   useSpeechRecognitionEvent,
   getLocaleForLanguage,
+  getCurrentLang,
 } from "../services/speechService";
 import Twemoji from "../components/Twemoji";
+import { showAdIfReady, loadAd } from "../services/adService";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Game">;
 
@@ -35,12 +38,25 @@ export default function GameScreen({ route, navigation }: Props) {
   const [spokenText, setSpokenText] = useState<string>("");
   const [timeLeft, setTimeLeft] = useState(10);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [hasVotedSkip, setHasVotedSkip] = useState(false);
 
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const feedbackAnim = useRef(new Animated.Value(0)).current;
   const wordAnim = useRef(new Animated.Value(0)).current;
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pendingRef = useRef(false);
+  const retryCountRef = useRef(0);
+
+  const isMyTurn = game?.currentTurn === playerId;
+  const currentWord: Word | undefined = game?.words[game.currentWordIndex];
+  const myScore = game?.players[playerId]?.score || 0;
+  const opponentId = game ? Object.keys(game.players).find((id) => id !== playerId) : null;
+  const opponentScore = opponentId ? game?.players[opponentId]?.score || 0 : 0;
+  const opponentName = opponentId ? game?.players[opponentId]?.name || "Rakip" : "Rakip";
+  const myName = game?.players[playerId]?.name || "Sen";
+  const skipVotes = game?.skipVotes || {};
+  const mySkipVote = skipVotes[playerId] || false;
+  const opponentSkipVote = opponentId ? skipVotes[opponentId] || false : false;
 
   // Speech recognition events
   useSpeechRecognitionEvent("result", (event) => {
@@ -57,7 +73,7 @@ export default function GameScreen({ route, navigation }: Props) {
 
       const allTranscripts = event.results.map((r: any) => r?.transcript || "").filter(Boolean);
       const correct = allTranscripts.some((t: string) =>
-        checkPronunciation(t, currentWord.acceptedPronunciations)
+        checkPronunciation(t, currentWord.acceptedPronunciations, currentWord.language)
       );
       if (correct) {
         showFeedback("Doğru! +1 Puan", true);
@@ -71,7 +87,12 @@ export default function GameScreen({ route, navigation }: Props) {
     }
   });
 
-  useSpeechRecognitionEvent("error", () => {
+  useSpeechRecognitionEvent("error", async () => {
+    if (retryCountRef.current === 0 && getCurrentLang() !== "en-US") {
+      retryCountRef.current = 1;
+      try { await startListening("en-US"); return; } catch {}
+    }
+    retryCountRef.current = 0;
     setIsRecording(false);
     setIsProcessing(false);
     pulseAnim.setValue(1);
@@ -79,30 +100,37 @@ export default function GameScreen({ route, navigation }: Props) {
   });
 
   useSpeechRecognitionEvent("end", () => {
-    setIsRecording(false);
-    setIsProcessing(false);
-    pulseAnim.setValue(1);
+    if (!pendingRef.current && retryCountRef.current === 0) {
+      setIsRecording(false);
+      setIsProcessing(false);
+      pulseAnim.setValue(1);
+    }
   });
 
   useEffect(() => {
     const unsub = subscribeToGame(gameId, (gameState) => {
       setGame(gameState);
       if (gameState?.status === "finished") {
-        navigation.replace("Result", { gameId, playerId });
+        showAdIfReady().then(() => {
+          loadAd();
+          navigation.replace("Result", { gameId, playerId });
+        });
       }
     });
     return unsub;
   }, [gameId]);
+
+  // Reset skip vote when word changes
+  useEffect(() => {
+    setHasVotedSkip(false);
+  }, [game?.currentWordIndex]);
 
   // Word entrance animation
   useEffect(() => {
     if (game) {
       wordAnim.setValue(0);
       Animated.spring(wordAnim, {
-        toValue: 1,
-        friction: 5,
-        tension: 40,
-        useNativeDriver: true,
+        toValue: 1, friction: 5, tension: 40, useNativeDriver: true,
       }).start();
     }
   }, [game?.currentWordIndex]);
@@ -110,18 +138,12 @@ export default function GameScreen({ route, navigation }: Props) {
   // Timer for each turn
   useEffect(() => {
     if (!game || game.status !== "playing") return;
-
-    const isMyTurn = game.currentTurn === playerId;
-    if (!isMyTurn) {
-      setTimeLeft(10);
-      return;
-    }
+    if (!isMyTurn) { setTimeLeft(10); return; }
 
     setTimeLeft(10);
     timerRef.current = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
-          // Time's up - count as wrong
           if (timerRef.current) clearInterval(timerRef.current);
           handlePronunciation(gameId, playerId, false);
           return 10;
@@ -130,34 +152,15 @@ export default function GameScreen({ route, navigation }: Props) {
       });
     }, 1000);
 
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [game?.currentTurn, game?.currentWordIndex]);
-
-  const isMyTurn = game?.currentTurn === playerId;
-  const currentWord: Word | undefined = game?.words[game.currentWordIndex];
-  const myScore = game?.players[playerId]?.score || 0;
-  const opponentId = game
-    ? Object.keys(game.players).find((id) => id !== playerId)
-    : null;
-  const opponentScore = opponentId
-    ? game?.players[opponentId]?.score || 0
-    : 0;
-  const opponentName = opponentId
-    ? game?.players[opponentId]?.name || "Rakip"
-    : "Rakip";
-  const myName = game?.players[playerId]?.name || "Sen";
 
   const showFeedback = (text: string, isPositive: boolean) => {
     setFeedback(text);
     feedbackAnim.setValue(1);
     if (Platform.OS !== "web") Vibration.vibrate(isPositive ? 100 : [0, 100, 100, 100]);
-    Animated.timing(feedbackAnim, {
-      toValue: 0,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start(() => setFeedback(null));
+    Animated.timing(feedbackAnim, { toValue: 0, duration: 2000, useNativeDriver: true })
+      .start(() => setFeedback(null));
   };
 
   const handleMicPress = async () => {
@@ -166,26 +169,21 @@ export default function GameScreen({ route, navigation }: Props) {
     if (!isRecording) {
       setIsRecording(true);
       setSpokenText("");
+      retryCountRef.current = 0;
       const locale = getLocaleForLanguage(currentWord.language);
       try {
         await startListening(locale);
       } catch {
-        setIsRecording(false);
-        showFeedback("Mikrofon hatası!", false);
-        return;
+        try { await startListening("en-US"); } catch {
+          setIsRecording(false);
+          showFeedback("Mikrofon hatası!", false);
+          return;
+        }
       }
       Animated.loop(
         Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.3,
-            duration: 500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: true,
-          }),
+          Animated.timing(pulseAnim, { toValue: 1.3, duration: 500, useNativeDriver: true }),
+          Animated.timing(pulseAnim, { toValue: 1, duration: 500, useNativeDriver: true }),
         ])
       ).start();
     } else {
@@ -196,17 +194,25 @@ export default function GameScreen({ route, navigation }: Props) {
     }
   };
 
+  const handleSkipVote = () => {
+    if (hasVotedSkip) return;
+    setHasVotedSkip(true);
+    // Stop any active recording
+    if (isRecording) {
+      setIsRecording(false);
+      pulseAnim.setValue(1);
+      stopListening();
+    }
+    voteSkipWord(gameId, playerId);
+  };
+
   const handleForfeit = () => {
     Alert.alert(
       "Pes Et",
       "Oyundan çıkmak istediğinize emin misiniz?",
       [
         { text: "İptal", style: "cancel" },
-        {
-          text: "Pes Et",
-          style: "destructive",
-          onPress: () => forfeitGame(gameId, playerId),
-        },
+        { text: "Pes Et", style: "destructive", onPress: () => forfeitGame(gameId, playerId) },
       ]
     );
   };
@@ -229,9 +235,7 @@ export default function GameScreen({ route, navigation }: Props) {
         </View>
 
         <View style={styles.roundInfo}>
-          <Text style={styles.roundText}>
-            {game.round}/{game.maxRounds}
-          </Text>
+          <Text style={styles.roundText}>{game.round}/{game.maxRounds}</Text>
           <Text style={styles.vsText}>VS</Text>
         </View>
 
@@ -242,54 +246,50 @@ export default function GameScreen({ route, navigation }: Props) {
       </View>
 
       {/* Timer */}
-      <View style={styles.timerContainer}>
+      <View style={styles.timerOuter}>
         <View
-          style={[
-            styles.timerBar,
-            {
-              width: `${(timeLeft / 10) * 100}%`,
-              backgroundColor:
-                timeLeft > 5 ? "#4CAF50" : timeLeft > 3 ? "#FF9800" : "#F44336",
-            },
-          ]}
+          style={[styles.timerBar, {
+            width: `${(timeLeft / 10) * 100}%`,
+            backgroundColor: timeLeft > 5 ? "#4CAF50" : timeLeft > 3 ? "#FF9800" : "#F44336",
+          }]}
         />
+        <View style={styles.timerTextWrap}>
+          <Twemoji emoji="⏱️" size={12} />
+          <Text style={styles.timerText}> {timeLeft}s</Text>
+        </View>
       </View>
 
       {/* Word Display */}
       <Animated.View
-        style={[
-          styles.wordContainer,
-          {
-            transform: [
-              { scale: wordAnim },
-              {
-                translateY: wordAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-50, 0],
-                }),
-              },
-            ],
-          },
-        ]}
+        style={[styles.wordCard, {
+          opacity: wordAnim,
+          transform: [
+            { scale: wordAnim },
+            { translateY: wordAnim.interpolate({ inputRange: [0, 1], outputRange: [-50, 0] }) },
+          ],
+        }]}
       >
-        <Twemoji emoji={currentWord.countryFlag} size={50} />
-        <Text style={styles.countryName}>
-          {currentWord.country} - {currentWord.language}
-        </Text>
+        <View style={styles.flagRow}>
+          <Twemoji emoji={currentWord.countryFlag} size={42} />
+        </View>
+        <Text style={styles.countryName}>{currentWord.country} • {currentWord.language}</Text>
         <Text style={styles.wordText}>{currentWord.word}</Text>
-        <Text style={styles.pronunciation}>[ {currentWord.pronunciation} ]</Text>
+        <View style={styles.pronunciationBadge}>
+          <Twemoji emoji="🔊" size={14} />
+          <Text style={styles.pronunciationText}> {currentWord.pronunciation}</Text>
+        </View>
       </Animated.View>
 
       {/* Turn Info */}
       <View style={styles.turnContainer}>
         {isMyTurn ? (
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Twemoji emoji="🎤" size={22} />
+          <View style={styles.turnRow}>
+            <Twemoji emoji="🎤" size={20} />
             <Text style={styles.turnText}> Senin sıran!</Text>
           </View>
         ) : (
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Twemoji emoji="⏳" size={22} />
+          <View style={styles.turnRow}>
+            <Twemoji emoji="⏳" size={20} />
             <Text style={styles.turnTextWait}> Rakibin sırası...</Text>
           </View>
         )}
@@ -298,41 +298,28 @@ export default function GameScreen({ route, navigation }: Props) {
       {/* Feedback */}
       {feedback && (
         <Animated.View
-          style={[
-            styles.feedbackContainer,
-            {
-              opacity: feedbackAnim,
-              transform: [
-                {
-                  translateY: feedbackAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [20, 0],
-                  }),
-                },
-              ],
-            },
-          ]}
+          style={[styles.feedbackContainer, {
+            opacity: feedbackAnim,
+            transform: [{ translateY: feedbackAnim.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }],
+          }]}
         >
-          <Text
-            style={[
-              styles.feedbackText,
-              {
-                color: feedback.includes("Doğru") ? "#4CAF50" : "#F44336",
-              },
-            ]}
-          >
-            {feedback}
+          <Twemoji emoji={feedback.includes("Doğru") ? "✅" : "❌"} size={24} />
+          <Text style={[styles.feedbackText, { color: feedback.includes("Doğru") ? "#4CAF50" : "#F44336" }]}>
+            {" "}{feedback}
           </Text>
         </Animated.View>
       )}
 
       {/* Spoken Text */}
       {spokenText ? (
-        <Text style={styles.spokenText}>Söylenen: "{spokenText}"</Text>
+        <View style={styles.spokenBubble}>
+          <Twemoji emoji="💬" size={14} />
+          <Text style={styles.spokenText}> "{spokenText}"</Text>
+        </View>
       ) : null}
 
       {/* Mic Button */}
-      <View style={styles.micContainer}>
+      <View style={styles.micArea}>
         <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
           <TouchableOpacity
             style={[
@@ -358,10 +345,31 @@ export default function GameScreen({ route, navigation }: Props) {
         </Text>
       </View>
 
-      {/* Forfeit Button */}
-      <TouchableOpacity style={styles.forfeitButton} onPress={handleForfeit}>
-        <Text style={styles.forfeitText}>Pes Et</Text>
-      </TouchableOpacity>
+      {/* Bottom Buttons */}
+      <View style={styles.bottomBtns}>
+        <TouchableOpacity
+          style={[styles.actionBtn, hasVotedSkip && styles.actionBtnActive]}
+          onPress={handleSkipVote}
+          disabled={!isMyTurn || hasVotedSkip || isRecording || isProcessing}
+          activeOpacity={0.7}
+        >
+          <Twemoji emoji="⏭️" size={18} />
+          <Text style={[styles.actionBtnText, hasVotedSkip && styles.actionBtnTextActive]}>
+            {" "}{hasVotedSkip
+              ? opponentSkipVote ? "Geçiliyor..." : "Rakip bekleniyor"
+              : "Kelimeyi Geç"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionBtn}
+          onPress={handleForfeit}
+          activeOpacity={0.7}
+        >
+          <Twemoji emoji="🏳️" size={18} />
+          <Text style={styles.actionBtnText}> Pes Et</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -369,9 +377,9 @@ export default function GameScreen({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1a1a2e",
-    paddingTop: 60,
-    paddingHorizontal: 20,
+    backgroundColor: "#0a0a1a",
+    paddingTop: 55,
+    paddingHorizontal: 16,
   },
   loadingText: {
     color: "#fff",
@@ -379,123 +387,184 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 100,
   },
+
+  // Header
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 15,
+    marginBottom: 12,
   },
   playerBox: {
     flex: 1,
     backgroundColor: "rgba(255,255,255,0.05)",
-    borderRadius: 12,
-    padding: 12,
+    borderRadius: 14,
+    padding: 10,
     alignItems: "center",
     borderWidth: 2,
     borderColor: "transparent",
   },
   activePlayer: {
     borderColor: "#e94560",
-    backgroundColor: "rgba(233, 69, 96, 0.1)",
+    backgroundColor: "rgba(233,69,96,0.1)",
   },
   playerName: {
-    fontSize: 14,
-    color: "#a0a0c0",
+    fontSize: 12,
+    color: "#888",
     fontWeight: "600",
   },
   playerScore: {
-    fontSize: 32,
+    fontSize: 28,
     color: "#fff",
     fontWeight: "900",
   },
   roundInfo: {
     alignItems: "center",
-    marginHorizontal: 10,
+    marginHorizontal: 8,
   },
   roundText: {
-    fontSize: 14,
-    color: "#a0a0c0",
+    fontSize: 12,
+    color: "#666",
     fontWeight: "600",
   },
   vsText: {
-    fontSize: 20,
+    fontSize: 16,
     color: "#e94560",
     fontWeight: "900",
   },
-  timerContainer: {
-    height: 6,
-    backgroundColor: "rgba(255,255,255,0.1)",
-    borderRadius: 3,
-    marginBottom: 20,
+
+  // Timer
+  timerOuter: {
+    height: 24,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    borderRadius: 12,
+    marginBottom: 14,
     overflow: "hidden",
+    justifyContent: "center",
   },
   timerBar: {
-    height: "100%",
-    borderRadius: 3,
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    borderRadius: 12,
   },
-  wordContainer: {
-    backgroundColor: "rgba(255,255,255,0.08)",
-    borderRadius: 20,
-    padding: 30,
+  timerTextWrap: {
+    flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: "rgba(233, 69, 96, 0.2)",
+    justifyContent: "center",
   },
-  countryFlag: {
-    fontSize: 50,
-    marginBottom: 8,
+  timerText: {
+    color: "#fff",
+    fontWeight: "800",
+    fontSize: 13,
+  },
+
+  // Word Card
+  wordCard: {
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderRadius: 22,
+    padding: 24,
+    alignItems: "center",
+    marginBottom: 12,
+    borderWidth: 1.5,
+    borderColor: "rgba(233,69,96,0.2)",
+  },
+  flagRow: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 6,
   },
   countryName: {
-    fontSize: 14,
-    color: "#a0a0c0",
-    marginBottom: 12,
-    letterSpacing: 1,
+    fontSize: 12,
+    color: "#888",
+    marginBottom: 8,
+    letterSpacing: 2,
+    textTransform: "uppercase",
   },
   wordText: {
-    fontSize: 40,
+    fontSize: 36,
     fontWeight: "900",
     color: "#fff",
     textAlign: "center",
     marginBottom: 10,
+    textShadowColor: "rgba(233,69,96,0.3)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8,
   },
-  pronunciation: {
-    fontSize: 18,
+  pronunciationBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(233,69,96,0.15)",
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 16,
+  },
+  pronunciationText: {
+    fontSize: 15,
     color: "#e94560",
+    fontWeight: "600",
     fontStyle: "italic",
   },
+
+  // Turn
   turnContainer: {
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 6,
+  },
+  turnRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   turnText: {
-    fontSize: 20,
+    fontSize: 18,
     color: "#4CAF50",
     fontWeight: "700",
   },
   turnTextWait: {
-    fontSize: 20,
+    fontSize: 18,
     color: "#FF9800",
     fontWeight: "700",
   },
+
+  // Feedback
   feedbackContainer: {
+    flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    justifyContent: "center",
+    marginBottom: 6,
   },
   feedbackText: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "900",
   },
+
+  // Spoken
+  spokenBubble: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderRadius: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    marginBottom: 6,
+    alignSelf: "center",
+  },
   spokenText: {
-    fontSize: 14,
-    color: "#a0a0c0",
-    textAlign: "center",
-    marginBottom: 10,
+    fontSize: 13,
+    color: "#888",
     fontStyle: "italic",
   },
-  micContainer: {
+
+  // Mic
+  micArea: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 14,
   },
   micButton: {
     width: 100,
@@ -504,36 +573,56 @@ const styles = StyleSheet.create({
     backgroundColor: "#e94560",
     justifyContent: "center",
     alignItems: "center",
-    elevation: 8,
+    borderWidth: 3,
+    borderColor: "rgba(255,255,255,0.15)",
     shadowColor: "#e94560",
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.5,
-    shadowRadius: 10,
+    shadowRadius: 14,
+    elevation: 8,
   },
   micButtonDisabled: {
-    backgroundColor: "#555",
+    backgroundColor: "#333",
+    borderColor: "rgba(255,255,255,0.06)",
     shadowColor: "#000",
   },
   micButtonRecording: {
     backgroundColor: "#F44336",
-  },
-  micIcon: {
-    fontSize: 40,
+    borderColor: "rgba(255,100,100,0.4)",
   },
   micHint: {
-    fontSize: 13,
-    color: "#a0a0c0",
-    marginTop: 10,
+    fontSize: 12,
+    color: "#555",
+    marginTop: 8,
     textAlign: "center",
   },
-  forfeitButton: {
-    alignSelf: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 20,
+
+  // Bottom Buttons
+  bottomBtns: {
+    flexDirection: "row",
+    gap: 10,
   },
-  forfeitText: {
+  actionBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderRadius: 14,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
+  },
+  actionBtnActive: {
+    backgroundColor: "rgba(233,69,96,0.15)",
+    borderColor: "rgba(233,69,96,0.3)",
+  },
+  actionBtnText: {
     fontSize: 14,
-    color: "#666",
-    textDecorationLine: "underline",
+    color: "#888",
+    fontWeight: "700",
+  },
+  actionBtnTextActive: {
+    color: "#e94560",
   },
 });

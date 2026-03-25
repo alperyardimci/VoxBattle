@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -10,10 +10,15 @@ import GameScreen from "./src/screens/GameScreen";
 import SoloGameScreen from "./src/screens/SoloGameScreen";
 import SoloResultScreen from "./src/screens/SoloResultScreen";
 import ResultScreen from "./src/screens/ResultScreen";
+import { initAds } from "./src/services/adService";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  useEffect(() => {
+    initAds();
+  }, []);
+
   return (
     <NavigationContainer>
       <StatusBar style="light" />
@@ -21,7 +26,7 @@ export default function App() {
         screenOptions={{
           headerShown: false,
           animation: "slide_from_right",
-          contentStyle: { backgroundColor: "#1a1a2e" },
+          contentStyle: { backgroundColor: "#0a0a1a" },
         }}
       >
         <Stack.Screen name="Home" component={HomeScreen} />

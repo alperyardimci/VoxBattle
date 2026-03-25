@@ -7,9 +7,9 @@ export const wordDatabase: Word[] = [
 
   // Turkish
   { id: "e1", word: "Merhaba", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "easy", pronunciation: "mer-ha-ba", acceptedPronunciations: ["merhaba", "mer haba", "meraba", "mare haba"] },
-  { id: "e2", word: "Teşekkürler", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "easy", pronunciation: "te-shek-kür-ler", acceptedPronunciations: ["tesekkurler", "teshekurler", "te shek ur ler"] },
+  { id: "e2", word: "Teşekkürler", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "easy", pronunciation: "te-shek-kür-ler", acceptedPronunciations: ["tesekkurler", "teshekurler", "te shek ur ler", "teşekkürler"] },
   { id: "e3", word: "Evet", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "easy", pronunciation: "e-vet", acceptedPronunciations: ["evet", "a vet", "evett"] },
-  { id: "e4", word: "Hayır", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "easy", pronunciation: "ha-yır", acceptedPronunciations: ["hayir", "hi year", "hi er"] },
+  { id: "e4", word: "Hayır", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "easy", pronunciation: "ha-yır", acceptedPronunciations: ["hayir", "hi year", "hi er", "hayır"] },
 
   // Spanish
   { id: "e5", word: "Hola", language: "Spanish", country: "Spain", countryFlag: "🇪🇸", difficulty: "easy", pronunciation: "oh-la", acceptedPronunciations: ["hola", "ola", "oh la", "oh lah"] },
@@ -36,10 +36,10 @@ export const wordDatabase: Word[] = [
   { id: "e20", word: "Amore", language: "Italian", country: "Italy", countryFlag: "🇮🇹", difficulty: "easy", pronunciation: "a-mo-re", acceptedPronunciations: ["amore", "a more", "amor", "a moray"] },
 
   // Japanese
-  { id: "e21", word: "Konnichiwa", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "easy", pronunciation: "kon-ni-chi-wa", acceptedPronunciations: ["konnichiwa", "konichiwa", "con nichi wa", "connie chee wa"] },
-  { id: "e22", word: "Arigatou", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "easy", pronunciation: "a-ri-ga-tou", acceptedPronunciations: ["arigatou", "arigato", "arrigato", "are e got o"] },
-  { id: "e23", word: "Sumimasen", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "easy", pronunciation: "su-mi-ma-sen", acceptedPronunciations: ["sumimasen", "sue me ma sen", "sue me ma son", "sue me mosen"] },
-  { id: "e24", word: "Kawaii", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "easy", pronunciation: "ka-wa-ii", acceptedPronunciations: ["kawaii", "ka wa ee", "co wa e", "kawayi"] },
+  { id: "e21", word: "Konnichiwa", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "easy", pronunciation: "kon-ni-chi-wa", acceptedPronunciations: ["konnichiwa", "konichiwa", "con nichi wa", "connie chee wa", "こんにちは"] },
+  { id: "e22", word: "Arigatou", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "easy", pronunciation: "a-ri-ga-tou", acceptedPronunciations: ["arigatou", "arigato", "arrigato", "are e got o", "ありがとう"] },
+  { id: "e23", word: "Sumimasen", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "easy", pronunciation: "su-mi-ma-sen", acceptedPronunciations: ["sumimasen", "sue me ma sen", "sue me ma son", "sue me mosen", "すみません"] },
+  { id: "e24", word: "Kawaii", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "easy", pronunciation: "ka-wa-ii", acceptedPronunciations: ["kawaii", "ka wa ee", "co wa e", "kawayi", "かわいい"] },
 
   // Portuguese
   { id: "e25", word: "Obrigado", language: "Portuguese", country: "Brazil", countryFlag: "🇧🇷", difficulty: "easy", pronunciation: "ob-ri-ga-do", acceptedPronunciations: ["obrigado", "obrigadu", "oh bree god oh", "obriga do"] },
@@ -47,12 +47,12 @@ export const wordDatabase: Word[] = [
   { id: "e27", word: "Saudade", language: "Portuguese", country: "Brazil", countryFlag: "🇧🇷", difficulty: "easy", pronunciation: "sau-da-de", acceptedPronunciations: ["saudade", "saw daddy", "so daddy", "so da de"] },
 
   // Korean
-  { id: "e28", word: "Annyeong", language: "Korean", country: "South Korea", countryFlag: "🇰🇷", difficulty: "easy", pronunciation: "an-nyeong", acceptedPronunciations: ["annyeong", "anyong", "an young", "on young"] },
-  { id: "e29", word: "Kamsahamnida", language: "Korean", country: "South Korea", countryFlag: "🇰🇷", difficulty: "easy", pronunciation: "kam-sa-ham-ni-da", acceptedPronunciations: ["kamsahamnida", "come sa ham knee da", "gum sa ham ni da", "come so hominy da"] },
+  { id: "e28", word: "Annyeong", language: "Korean", country: "South Korea", countryFlag: "🇰🇷", difficulty: "easy", pronunciation: "an-nyeong", acceptedPronunciations: ["annyeong", "anyong", "an young", "on young", "안녕"] },
+  { id: "e29", word: "Kamsahamnida", language: "Korean", country: "South Korea", countryFlag: "🇰🇷", difficulty: "easy", pronunciation: "kam-sa-ham-ni-da", acceptedPronunciations: ["kamsahamnida", "come sa ham knee da", "gum sa ham ni da", "come so hominy da", "감사합니다"] },
 
   // Greek
-  { id: "e30", word: "Yassou", language: "Greek", country: "Greece", countryFlag: "🇬🇷", difficulty: "easy", pronunciation: "ya-su", acceptedPronunciations: ["yassou", "yassu", "ya sue", "yeah sue"] },
-  { id: "e31", word: "Efcharisto", language: "Greek", country: "Greece", countryFlag: "🇬🇷", difficulty: "easy", pronunciation: "ef-ha-ri-sto", acceptedPronunciations: ["efcharisto", "ef harry stow", "of harry stow", "f haristo"] },
+  { id: "e30", word: "Yassou", language: "Greek", country: "Greece", countryFlag: "🇬🇷", difficulty: "easy", pronunciation: "ya-su", acceptedPronunciations: ["yassou", "yassu", "ya sue", "yeah sue", "γεια σου"] },
+  { id: "e31", word: "Efcharisto", language: "Greek", country: "Greece", countryFlag: "🇬🇷", difficulty: "easy", pronunciation: "ef-ha-ri-sto", acceptedPronunciations: ["efcharisto", "ef harry stow", "of harry stow", "f haristo", "ευχαριστώ"] },
 
   // Dutch
   { id: "e32", word: "Dankjewel", language: "Dutch", country: "Netherlands", countryFlag: "🇳🇱", difficulty: "easy", pronunciation: "dank-ye-vel", acceptedPronunciations: ["dankjewel", "dunk you well", "dank ya vel"] },
@@ -71,23 +71,23 @@ export const wordDatabase: Word[] = [
   { id: "e39", word: "Mahalo", language: "Hawaiian", country: "USA", countryFlag: "🇺🇸", difficulty: "easy", pronunciation: "ma-ha-lo", acceptedPronunciations: ["mahalo", "ma ha lo", "ma hollow", "my hollow"] },
 
   // Hindi
-  { id: "e40", word: "Namaste", language: "Hindi", country: "India", countryFlag: "🇮🇳", difficulty: "easy", pronunciation: "na-ma-ste", acceptedPronunciations: ["namaste", "nama stay", "nah must day", "nomis day"] },
+  { id: "e40", word: "Namaste", language: "Hindi", country: "India", countryFlag: "🇮🇳", difficulty: "easy", pronunciation: "na-ma-ste", acceptedPronunciations: ["namaste", "nama stay", "nah must day", "nomis day", "नमस्ते"] },
 
   // Arabic
-  { id: "e41", word: "Salaam", language: "Arabic", country: "Saudi Arabia", countryFlag: "🇸🇦", difficulty: "easy", pronunciation: "sa-laam", acceptedPronunciations: ["salaam", "salam", "sa lam"] },
+  { id: "e41", word: "Salaam", language: "Arabic", country: "Saudi Arabia", countryFlag: "🇸🇦", difficulty: "easy", pronunciation: "sa-laam", acceptedPronunciations: ["salaam", "salam", "sa lam", "سلام"] },
 
   // Russian
-  { id: "e42", word: "Privet", language: "Russian", country: "Russia", countryFlag: "🇷🇺", difficulty: "easy", pronunciation: "pri-vet", acceptedPronunciations: ["privet", "pre vet"] },
-  { id: "e43", word: "Da", language: "Russian", country: "Russia", countryFlag: "🇷🇺", difficulty: "easy", pronunciation: "da", acceptedPronunciations: ["da", "duh"] },
+  { id: "e42", word: "Privet", language: "Russian", country: "Russia", countryFlag: "🇷🇺", difficulty: "easy", pronunciation: "pri-vet", acceptedPronunciations: ["privet", "pre vet", "привет"] },
+  { id: "e43", word: "Da", language: "Russian", country: "Russia", countryFlag: "🇷🇺", difficulty: "easy", pronunciation: "da", acceptedPronunciations: ["da", "duh", "да"] },
 
   // Chinese
-  { id: "e44", word: "Nǐ hǎo", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "easy", pronunciation: "nee-hao", acceptedPronunciations: ["ni hao", "nihao", "knee how", "nee how"] },
+  { id: "e44", word: "Nǐ hǎo", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "easy", pronunciation: "nee-hao", acceptedPronunciations: ["ni hao", "nihao", "knee how", "nee how", "你好"] },
 
   // Thai
-  { id: "e45", word: "Sawasdee", language: "Thai", country: "Thailand", countryFlag: "🇹🇭", difficulty: "easy", pronunciation: "sa-wat-dee", acceptedPronunciations: ["sawasdee", "sawadee", "sa what d", "swat d"] },
+  { id: "e45", word: "Sawasdee", language: "Thai", country: "Thailand", countryFlag: "🇹🇭", difficulty: "easy", pronunciation: "sa-wat-dee", acceptedPronunciations: ["sawasdee", "sawadee", "sa what d", "swat d", "สวัสดี"] },
 
   // Vietnamese
-  { id: "e46", word: "Xin chào", language: "Vietnamese", country: "Vietnam", countryFlag: "🇻🇳", difficulty: "easy", pronunciation: "sin-chao", acceptedPronunciations: ["xin chao", "sin chow", "seen chow", "sin chao"] },
+  { id: "e46", word: "Xin chào", language: "Vietnamese", country: "Vietnam", countryFlag: "🇻🇳", difficulty: "easy", pronunciation: "sin-chao", acceptedPronunciations: ["xin chao", "sin chow", "seen chow", "sin chao", "xin chào"] },
 
   // Maori
   { id: "e47", word: "Kia ora", language: "Maori", country: "New Zealand", countryFlag: "🇳🇿", difficulty: "easy", pronunciation: "kee-a-o-ra", acceptedPronunciations: ["kia ora", "kia or a", "key or a", "kia aura"] },
@@ -99,7 +99,7 @@ export const wordDatabase: Word[] = [
   { id: "e49", word: "Takk", language: "Norwegian", country: "Norway", countryFlag: "🇳🇴", difficulty: "easy", pronunciation: "takk", acceptedPronunciations: ["takk", "talk", "tuck", "tack"] },
 
   // Romanian
-  { id: "e50", word: "Bună", language: "Romanian", country: "Romania", countryFlag: "🇷🇴", difficulty: "easy", pronunciation: "bu-nə", acceptedPronunciations: ["buna", "boo na", "bunna", "boona"] },
+  { id: "e50", word: "Bună", language: "Romanian", country: "Romania", countryFlag: "🇷🇴", difficulty: "easy", pronunciation: "bu-nə", acceptedPronunciations: ["buna", "boo na", "bunna", "boona", "bună"] },
 
   // Croatian
   { id: "e51", word: "Hvala", language: "Croatian", country: "Croatia", countryFlag: "🇭🇷", difficulty: "easy", pronunciation: "hva-la", acceptedPronunciations: ["hvala", "vala", "fala", "holla"] },
@@ -108,7 +108,7 @@ export const wordDatabase: Word[] = [
   { id: "e52", word: "Ahoj", language: "Czech", country: "Czech Republic", countryFlag: "🇨🇿", difficulty: "easy", pronunciation: "a-hoy", acceptedPronunciations: ["ahoj", "ahoy", "a hoy", "ahh hoy"] },
 
   // Persian
-  { id: "e53", word: "Mersi", language: "Persian", country: "Iran", countryFlag: "🇮🇷", difficulty: "easy", pronunciation: "mer-si", acceptedPronunciations: ["mersi", "mercy", "mer see", "merci"] },
+  { id: "e53", word: "Mersi", language: "Persian", country: "Iran", countryFlag: "🇮🇷", difficulty: "easy", pronunciation: "mer-si", acceptedPronunciations: ["mersi", "mercy", "mer see", "merci", "ممنون"] },
 
   // Indonesian
   { id: "e54", word: "Terima kasih", language: "Indonesian", country: "Indonesia", countryFlag: "🇮🇩", difficulty: "easy", pronunciation: "te-ri-ma ka-si", acceptedPronunciations: ["terima kasih", "terry my ka see", "trema kasi", "tree ma ca see"] },
@@ -126,7 +126,7 @@ export const wordDatabase: Word[] = [
   { id: "e58", word: "Bawo ni", language: "Yoruba", country: "Nigeria", countryFlag: "🇳🇬", difficulty: "easy", pronunciation: "ba-wo-ni", acceptedPronunciations: ["bawo ni", "bow oh knee", "bah wo nee", "ba won e"] },
 
   // Catalan
-  { id: "e59", word: "Adéu", language: "Catalan", country: "Spain", countryFlag: "🇪🇸", difficulty: "easy", pronunciation: "a-dew", acceptedPronunciations: ["adeu", "add you", "a dew", "a day you"] },
+  { id: "e59", word: "Adéu", language: "Catalan", country: "Spain", countryFlag: "🇪🇸", difficulty: "easy", pronunciation: "a-dew", acceptedPronunciations: ["adeu", "add you", "a dew", "a day you", "adéu"] },
 
   // Maltese
   { id: "e60", word: "Grazzi", language: "Maltese", country: "Malta", countryFlag: "🇲🇹", difficulty: "easy", pronunciation: "grat-si", acceptedPronunciations: ["grazzi", "got see", "grazi", "grotsie"] },
@@ -136,9 +136,9 @@ export const wordDatabase: Word[] = [
   // =============================================
 
   // Turkish
-  { id: "m1", word: "Günaydın", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "medium", pronunciation: "gü-nay-dın", acceptedPronunciations: ["gunaydin", "goo nigh dun", "gonna done", "gun eye din"] },
-  { id: "m2", word: "Hoşgeldiniz", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "medium", pronunciation: "hosh-gel-di-niz", acceptedPronunciations: ["hosgeldiniz", "hosh geldiniz", "hosh gel din is", "hose gel din ease"] },
-  { id: "m3", word: "Görüşürüz", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "medium", pronunciation: "gö-rü-shü-rüz", acceptedPronunciations: ["gorusuruz", "gore oo sure ooze", "go ru shoo ruse", "guru shoes"] },
+  { id: "m1", word: "Günaydın", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "medium", pronunciation: "gü-nay-dın", acceptedPronunciations: ["gunaydin", "goo nigh dun", "gonna done", "gun eye din", "günaydın"] },
+  { id: "m2", word: "Hoşgeldiniz", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "medium", pronunciation: "hosh-gel-di-niz", acceptedPronunciations: ["hosgeldiniz", "hosh geldiniz", "hosh gel din is", "hose gel din ease", "hoşgeldiniz"] },
+  { id: "m3", word: "Görüşürüz", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "medium", pronunciation: "gö-rü-shü-rüz", acceptedPronunciations: ["gorusuruz", "gore oo sure ooze", "go ru shoo ruse", "guru shoes", "görüşürüz"] },
 
   // French
   { id: "m4", word: "Croissant", language: "French", country: "France", countryFlag: "🇫🇷", difficulty: "medium", pronunciation: "krwa-son", acceptedPronunciations: ["croissant", "kwason", "krwason", "crosson"] },
@@ -153,48 +153,48 @@ export const wordDatabase: Word[] = [
   { id: "m11", word: "Gesundheit", language: "German", country: "Germany", countryFlag: "🇩🇪", difficulty: "medium", pronunciation: "ge-zund-hayt", acceptedPronunciations: ["gesundheit", "gazoon tight", "goes on tight", "ga zoond height"] },
 
   // Japanese
-  { id: "m12", word: "Sayounara", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "medium", pronunciation: "sa-yo-u-na-ra", acceptedPronunciations: ["sayounara", "sayonara", "sionara", "say oh nara"] },
-  { id: "m13", word: "Itadakimasu", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "medium", pronunciation: "i-ta-da-ki-ma-su", acceptedPronunciations: ["itadakimasu", "itadakimas", "eat a ducky moss", "eat a doc e moss"] },
-  { id: "m14", word: "Ganbatte", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "medium", pronunciation: "gan-bat-te", acceptedPronunciations: ["ganbatte", "gone but a", "gun bought a", "gum baa tay"] },
-  { id: "m15", word: "Sugoi", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "medium", pronunciation: "su-go-i", acceptedPronunciations: ["sugoi", "sue go e", "su goy", "sue goo e"] },
+  { id: "m12", word: "Sayounara", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "medium", pronunciation: "sa-yo-u-na-ra", acceptedPronunciations: ["sayounara", "sayonara", "sionara", "say oh nara", "さようなら"] },
+  { id: "m13", word: "Itadakimasu", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "medium", pronunciation: "i-ta-da-ki-ma-su", acceptedPronunciations: ["itadakimasu", "itadakimas", "eat a ducky moss", "eat a doc e moss", "いただきます"] },
+  { id: "m14", word: "Ganbatte", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "medium", pronunciation: "gan-bat-te", acceptedPronunciations: ["ganbatte", "gone but a", "gun bought a", "gum baa tay", "頑張って"] },
+  { id: "m15", word: "Sugoi", language: "Japanese", country: "Japan", countryFlag: "🇯🇵", difficulty: "medium", pronunciation: "su-go-i", acceptedPronunciations: ["sugoi", "sue go e", "su goy", "sue goo e", "すごい"] },
 
   // Chinese
-  { id: "m16", word: "Xièxiè", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "medium", pronunciation: "shye-shye", acceptedPronunciations: ["xiexie", "shye shye", "shieshie", "she she"] },
-  { id: "m17", word: "Zàijiàn", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "medium", pronunciation: "dzay-jyen", acceptedPronunciations: ["zaijian", "zi gen", "dzy gen", "zai jian"] },
-  { id: "m18", word: "Ganbei", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "medium", pronunciation: "gan-bay", acceptedPronunciations: ["ganbei", "gone bay", "gun bay", "gum bay"] },
+  { id: "m16", word: "Xièxiè", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "medium", pronunciation: "shye-shye", acceptedPronunciations: ["xiexie", "shye shye", "shieshie", "she she", "谢谢"] },
+  { id: "m17", word: "Zàijiàn", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "medium", pronunciation: "dzay-jyen", acceptedPronunciations: ["zaijian", "zi gen", "dzy gen", "zai jian", "再见"] },
+  { id: "m18", word: "Ganbei", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "medium", pronunciation: "gan-bay", acceptedPronunciations: ["ganbei", "gone bay", "gun bay", "gum bay", "干杯"] },
 
   // Russian
-  { id: "m19", word: "Spasibo", language: "Russian", country: "Russia", countryFlag: "🇷🇺", difficulty: "medium", pronunciation: "spa-si-bo", acceptedPronunciations: ["spasibo", "spasiba", "spaseebo", "spa see bo"] },
-  { id: "m20", word: "Zdravstvuyte", language: "Russian", country: "Russia", countryFlag: "🇷🇺", difficulty: "medium", pronunciation: "zdra-stvuy-tye", acceptedPronunciations: ["zdravstvuyte", "zdrastvuyte", "stras vuitye", "zdra stvoy tye"] },
-  { id: "m21", word: "Dosvidaniya", language: "Russian", country: "Russia", countryFlag: "🇷🇺", difficulty: "medium", pronunciation: "dos-vi-da-ni-ya", acceptedPronunciations: ["dosvidaniya", "das vidanya", "dos vee don ya", "daz vee danya"] },
+  { id: "m19", word: "Spasibo", language: "Russian", country: "Russia", countryFlag: "🇷🇺", difficulty: "medium", pronunciation: "spa-si-bo", acceptedPronunciations: ["spasibo", "spasiba", "spaseebo", "spa see bo", "спасибо"] },
+  { id: "m20", word: "Zdravstvuyte", language: "Russian", country: "Russia", countryFlag: "🇷🇺", difficulty: "medium", pronunciation: "zdra-stvuy-tye", acceptedPronunciations: ["zdravstvuyte", "zdrastvuyte", "stras vuitye", "zdra stvoy tye", "здравствуйте"] },
+  { id: "m21", word: "Dosvidaniya", language: "Russian", country: "Russia", countryFlag: "🇷🇺", difficulty: "medium", pronunciation: "dos-vi-da-ni-ya", acceptedPronunciations: ["dosvidaniya", "das vidanya", "dos vee don ya", "daz vee danya", "до свидания"] },
 
   // Arabic
-  { id: "m22", word: "Shukran", language: "Arabic", country: "Saudi Arabia", countryFlag: "🇸🇦", difficulty: "medium", pronunciation: "shuk-ran", acceptedPronunciations: ["shukran", "shookran", "shukren", "shoe kran"] },
-  { id: "m23", word: "Marhaba", language: "Arabic", country: "Saudi Arabia", countryFlag: "🇸🇦", difficulty: "medium", pronunciation: "mar-ha-ba", acceptedPronunciations: ["marhaba", "merheba", "marheba", "mar haba"] },
-  { id: "m24", word: "Inshallah", language: "Arabic", country: "Saudi Arabia", countryFlag: "🇸🇦", difficulty: "medium", pronunciation: "in-sha-la", acceptedPronunciations: ["inshallah", "in sha la", "in shall a", "insha allah"] },
-  { id: "m25", word: "Yalla", language: "Arabic", country: "Saudi Arabia", countryFlag: "🇸🇦", difficulty: "medium", pronunciation: "yal-la", acceptedPronunciations: ["yalla", "yella", "ya la", "yeah la"] },
+  { id: "m22", word: "Shukran", language: "Arabic", country: "Saudi Arabia", countryFlag: "🇸🇦", difficulty: "medium", pronunciation: "shuk-ran", acceptedPronunciations: ["shukran", "shookran", "shukren", "shoe kran", "شكرا"] },
+  { id: "m23", word: "Marhaba", language: "Arabic", country: "Saudi Arabia", countryFlag: "🇸🇦", difficulty: "medium", pronunciation: "mar-ha-ba", acceptedPronunciations: ["marhaba", "merheba", "marheba", "mar haba", "مرحبا"] },
+  { id: "m24", word: "Inshallah", language: "Arabic", country: "Saudi Arabia", countryFlag: "🇸🇦", difficulty: "medium", pronunciation: "in-sha-la", acceptedPronunciations: ["inshallah", "in sha la", "in shall a", "insha allah", "إن شاء الله"] },
+  { id: "m25", word: "Yalla", language: "Arabic", country: "Saudi Arabia", countryFlag: "🇸🇦", difficulty: "medium", pronunciation: "yal-la", acceptedPronunciations: ["yalla", "yella", "ya la", "yeah la", "يلا"] },
 
   // Hindi
-  { id: "m26", word: "Dhanyavaad", language: "Hindi", country: "India", countryFlag: "🇮🇳", difficulty: "medium", pronunciation: "dhan-ya-vaad", acceptedPronunciations: ["dhanyavaad", "dhanyavad", "danyavad", "done ya vod"] },
-  { id: "m27", word: "Shukriya", language: "Hindi", country: "India", countryFlag: "🇮🇳", difficulty: "medium", pronunciation: "shuk-ri-ya", acceptedPronunciations: ["shukriya", "shoe cree ya", "shook re a"] },
+  { id: "m26", word: "Dhanyavaad", language: "Hindi", country: "India", countryFlag: "🇮🇳", difficulty: "medium", pronunciation: "dhan-ya-vaad", acceptedPronunciations: ["dhanyavaad", "dhanyavad", "danyavad", "done ya vod", "धन्यवाद"] },
+  { id: "m27", word: "Shukriya", language: "Hindi", country: "India", countryFlag: "🇮🇳", difficulty: "medium", pronunciation: "shuk-ri-ya", acceptedPronunciations: ["shukriya", "shoe cree ya", "shook re a", "शुक्रिया"] },
 
   // Korean
-  { id: "m28", word: "Annyeonghaseyo", language: "Korean", country: "South Korea", countryFlag: "🇰🇷", difficulty: "medium", pronunciation: "an-nyeong-ha-se-yo", acceptedPronunciations: ["annyeonghaseyo", "on young ha say yo", "an yong haseyo", "ah knee on ha say oh"] },
-  { id: "m29", word: "Saranghae", language: "Korean", country: "South Korea", countryFlag: "🇰🇷", difficulty: "medium", pronunciation: "sa-rang-he", acceptedPronunciations: ["saranghae", "sa rang hey", "so wrong hey", "sir on hey"] },
+  { id: "m28", word: "Annyeonghaseyo", language: "Korean", country: "South Korea", countryFlag: "🇰🇷", difficulty: "medium", pronunciation: "an-nyeong-ha-se-yo", acceptedPronunciations: ["annyeonghaseyo", "on young ha say yo", "an yong haseyo", "ah knee on ha say oh", "안녕하세요"] },
+  { id: "m29", word: "Saranghae", language: "Korean", country: "South Korea", countryFlag: "🇰🇷", difficulty: "medium", pronunciation: "sa-rang-he", acceptedPronunciations: ["saranghae", "sa rang hey", "so wrong hey", "sir on hey", "사랑해"] },
 
   // Portuguese
   { id: "m30", word: "Desculpa", language: "Portuguese", country: "Brazil", countryFlag: "🇧🇷", difficulty: "medium", pronunciation: "des-kul-pa", acceptedPronunciations: ["desculpa", "desk cool pa", "this cool pa", "des culpa"] },
-  { id: "m31", word: "Parabéns", language: "Portuguese", country: "Brazil", countryFlag: "🇧🇷", difficulty: "medium", pronunciation: "pa-ra-bens", acceptedPronunciations: ["parabens", "para bens", "para baines", "power benz"] },
+  { id: "m31", word: "Parabéns", language: "Portuguese", country: "Brazil", countryFlag: "🇧🇷", difficulty: "medium", pronunciation: "pa-ra-bens", acceptedPronunciations: ["parabens", "para bens", "para baines", "power benz", "parabéns"] },
 
   // Polish
-  { id: "m32", word: "Dziękuję", language: "Polish", country: "Poland", countryFlag: "🇵🇱", difficulty: "medium", pronunciation: "jen-ku-ye", acceptedPronunciations: ["dziekuje", "jen koo yeah", "jane coup yeah", "jen koo yeh"] },
+  { id: "m32", word: "Dziękuję", language: "Polish", country: "Poland", countryFlag: "🇵🇱", difficulty: "medium", pronunciation: "jen-ku-ye", acceptedPronunciations: ["dziekuje", "jen koo yeah", "jane coup yeah", "jen koo yeh", "dziękuję"] },
   { id: "m33", word: "Przepraszam", language: "Polish", country: "Poland", countryFlag: "🇵🇱", difficulty: "medium", pronunciation: "pshe-pra-sham", acceptedPronunciations: ["przepraszam", "sh prash om", "pshe prasham", "shay pra shom"] },
 
   // Czech
-  { id: "m34", word: "Děkuji", language: "Czech", country: "Czech Republic", countryFlag: "🇨🇿", difficulty: "medium", pronunciation: "dye-ku-yi", acceptedPronunciations: ["dekuji", "yeah could ye", "deck oo ye", "deco ye"] },
+  { id: "m34", word: "Děkuji", language: "Czech", country: "Czech Republic", countryFlag: "🇨🇿", difficulty: "medium", pronunciation: "dye-ku-yi", acceptedPronunciations: ["dekuji", "yeah could ye", "deck oo ye", "deco ye", "děkuji"] },
 
   // Hungarian
-  { id: "m35", word: "Köszönöm", language: "Hungarian", country: "Hungary", countryFlag: "🇭🇺", difficulty: "medium", pronunciation: "kø-sø-nøm", acceptedPronunciations: ["koszonom", "curse on um", "ko so nom", "cuss on ohm"] },
+  { id: "m35", word: "Köszönöm", language: "Hungarian", country: "Hungary", countryFlag: "🇭🇺", difficulty: "medium", pronunciation: "kø-sø-nøm", acceptedPronunciations: ["koszonom", "curse on um", "ko so nom", "cuss on ohm", "köszönöm"] },
 
   // Finnish
   { id: "m36", word: "Kiitos", language: "Finnish", country: "Finland", countryFlag: "🇫🇮", difficulty: "medium", pronunciation: "kee-tos", acceptedPronunciations: ["kiitos", "key toss", "key toes", "key dose"] },
@@ -212,20 +212,20 @@ export const wordDatabase: Word[] = [
   { id: "m40", word: "Takk fyrir", language: "Icelandic", country: "Iceland", countryFlag: "🇮🇸", difficulty: "medium", pronunciation: "tahk-fi-rir", acceptedPronunciations: ["takk fyrir", "talk fear ear", "talk for your", "tuck fear ear"] },
 
   // Hebrew
-  { id: "m41", word: "Toda raba", language: "Hebrew", country: "Israel", countryFlag: "🇮🇱", difficulty: "medium", pronunciation: "to-da-ra-ba", acceptedPronunciations: ["toda raba", "toe da rah ba", "to the rubber"] },
-  { id: "m42", word: "Shalom", language: "Hebrew", country: "Israel", countryFlag: "🇮🇱", difficulty: "medium", pronunciation: "sha-lom", acceptedPronunciations: ["shalom", "sha lome", "shall ohm", "show long"] },
+  { id: "m41", word: "Toda raba", language: "Hebrew", country: "Israel", countryFlag: "🇮🇱", difficulty: "medium", pronunciation: "to-da-ra-ba", acceptedPronunciations: ["toda raba", "toe da rah ba", "to the rubber", "תודה רבה"] },
+  { id: "m42", word: "Shalom", language: "Hebrew", country: "Israel", countryFlag: "🇮🇱", difficulty: "medium", pronunciation: "sha-lom", acceptedPronunciations: ["shalom", "sha lome", "shall ohm", "show long", "שלום"] },
 
   // Malay
   { id: "m43", word: "Terima kasih", language: "Malay", country: "Malaysia", countryFlag: "🇲🇾", difficulty: "medium", pronunciation: "te-ri-ma-ka-si", acceptedPronunciations: ["terima kasih", "terry ma ka see", "tree ma kasi", "trema kasi"] },
 
   // Turkish (more)
-  { id: "m44", word: "Maşallah", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "medium", pronunciation: "ma-sha-la", acceptedPronunciations: ["mashallah", "ma sha la", "my sha la", "mash allah"] },
+  { id: "m44", word: "Maşallah", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "medium", pronunciation: "ma-sha-la", acceptedPronunciations: ["mashallah", "ma sha la", "my sha la", "mash allah", "maşallah"] },
 
   // Tagalog
   { id: "m45", word: "Magandang araw", language: "Tagalog", country: "Philippines", countryFlag: "🇵🇭", difficulty: "medium", pronunciation: "ma-gan-dang a-raw", acceptedPronunciations: ["magandang araw", "ma gun dung a raw", "my gun dung arrow", "maganda narrow"] },
 
   // Thai
-  { id: "m46", word: "Khop khun", language: "Thai", country: "Thailand", countryFlag: "🇹🇭", difficulty: "medium", pronunciation: "kop-kun", acceptedPronunciations: ["khop khun", "cop coon", "cop con", "cup kun"] },
+  { id: "m46", word: "Khop khun", language: "Thai", country: "Thailand", countryFlag: "🇹🇭", difficulty: "medium", pronunciation: "kop-kun", acceptedPronunciations: ["khop khun", "cop coon", "cop con", "cup kun", "ขอบคุณ"] },
 
   // Amharic
   { id: "m47", word: "Ameseginallehu", language: "Amharic", country: "Ethiopia", countryFlag: "🇪🇹", difficulty: "medium", pronunciation: "a-me-se-gi-na-le-hu", acceptedPronunciations: ["ameseginallehu", "on my second all who", "a message in a low hue"] },
@@ -249,19 +249,19 @@ export const wordDatabase: Word[] = [
   { id: "m53", word: "Paldies", language: "Latvian", country: "Latvia", countryFlag: "🇱🇻", difficulty: "medium", pronunciation: "pal-dies", acceptedPronunciations: ["paldies", "pal d es", "pull these", "pal these"] },
 
   // Lithuanian
-  { id: "m54", word: "Ačiū", language: "Lithuanian", country: "Lithuania", countryFlag: "🇱🇹", difficulty: "medium", pronunciation: "a-choo", acceptedPronunciations: ["aciu", "a chew", "achoo", "ah choo"] },
+  { id: "m54", word: "Ačiū", language: "Lithuanian", country: "Lithuania", countryFlag: "🇱🇹", difficulty: "medium", pronunciation: "a-choo", acceptedPronunciations: ["aciu", "a chew", "achoo", "ah choo", "ačiū"] },
 
   // Estonian
-  { id: "m55", word: "Aitäh", language: "Estonian", country: "Estonia", countryFlag: "🇪🇪", difficulty: "medium", pronunciation: "ai-tah", acceptedPronunciations: ["aitah", "eye ta", "i ta", "eye tah"] },
+  { id: "m55", word: "Aitäh", language: "Estonian", country: "Estonia", countryFlag: "🇪🇪", difficulty: "medium", pronunciation: "ai-tah", acceptedPronunciations: ["aitah", "eye ta", "i ta", "eye tah", "aitäh"] },
 
   // Bulgarian
-  { id: "m56", word: "Blagodarya", language: "Bulgarian", country: "Bulgaria", countryFlag: "🇧🇬", difficulty: "medium", pronunciation: "bla-go-da-rya", acceptedPronunciations: ["blagodarya", "blog a diary a", "blog oh daria", "blah go daria"] },
+  { id: "m56", word: "Blagodarya", language: "Bulgarian", country: "Bulgaria", countryFlag: "🇧🇬", difficulty: "medium", pronunciation: "bla-go-da-rya", acceptedPronunciations: ["blagodarya", "blog a diary a", "blog oh daria", "blah go daria", "благодаря"] },
 
   // Serbian
-  { id: "m57", word: "Hvala lepo", language: "Serbian", country: "Serbia", countryFlag: "🇷🇸", difficulty: "medium", pronunciation: "hva-la-le-po", acceptedPronunciations: ["hvala lepo", "vala lepo", "follow lay po"] },
+  { id: "m57", word: "Hvala lepo", language: "Serbian", country: "Serbia", countryFlag: "🇷🇸", difficulty: "medium", pronunciation: "hva-la-le-po", acceptedPronunciations: ["hvala lepo", "vala lepo", "follow lay po", "хвала лепо"] },
 
   // Ukrainian
-  { id: "m58", word: "Dyakuyu", language: "Ukrainian", country: "Ukraine", countryFlag: "🇺🇦", difficulty: "medium", pronunciation: "dya-ku-yu", acceptedPronunciations: ["dyakuyu", "jack a you", "the echo you", "die a coup you"] },
+  { id: "m58", word: "Dyakuyu", language: "Ukrainian", country: "Ukraine", countryFlag: "🇺🇦", difficulty: "medium", pronunciation: "dya-ku-yu", acceptedPronunciations: ["dyakuyu", "jack a you", "the echo you", "die a coup you", "дякую"] },
 
   // Kazakh
   { id: "m59", word: "Rakhmet", language: "Kazakh", country: "Kazakhstan", countryFlag: "🇰🇿", difficulty: "medium", pronunciation: "rah-met", acceptedPronunciations: ["rakhmet", "rock met", "rah met", "rock mat"] },
@@ -275,43 +275,43 @@ export const wordDatabase: Word[] = [
 
   // Turkish
   { id: "h1", word: "Afyonkarahisar", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "hard", pronunciation: "af-yon-ka-ra-hi-sar", acceptedPronunciations: ["afyonkarahisar", "afyon karahisar", "of yon cara his are"] },
-  { id: "h2", word: "Müteşekkir", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "hard", pronunciation: "mü-te-shek-kir", acceptedPronunciations: ["mutesekkir", "muteshekkir", "moo tesh a cure", "mu te shek ear"] },
-  { id: "h3", word: "Çekoslovakyalılaştıramadıklarımızdan", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "hard", pronunciation: "che-ko-slo-vak-ya-lı-laş-tı-ra-ma-dık-la-rı-mız-dan", acceptedPronunciations: ["cekoslovakyalilastiramadiklarimizdan", "check a slow vacuum"] },
+  { id: "h2", word: "Müteşekkir", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "hard", pronunciation: "mü-te-shek-kir", acceptedPronunciations: ["mutesekkir", "muteshekkir", "moo tesh a cure", "mu te shek ear", "müteşekkir"] },
+  { id: "h3", word: "Çekoslovakyalılaştıramadıklarımızdan", language: "Turkish", country: "Turkey", countryFlag: "🇹🇷", difficulty: "hard", pronunciation: "che-ko-slo-vak-ya-lı-laş-tı-ra-ma-dık-la-rı-mız-dan", acceptedPronunciations: ["cekoslovakyalilastiramadiklarimizdan", "check a slow vacuum", "çekoslovakyalılaştıramadıklarımızdan"] },
 
   // German
   { id: "h4", word: "Streichholzschächtelchen", language: "German", country: "Germany", countryFlag: "🇩🇪", difficulty: "hard", pronunciation: "shtraykh-holts-shekh-tel-khen", acceptedPronunciations: ["streichholzschachtelchen", "strike holts shack tell can", "sh try holds shack tell hen"] },
   { id: "h5", word: "Geschwindigkeitsbegrenzung", language: "German", country: "Germany", countryFlag: "🇩🇪", difficulty: "hard", pronunciation: "ge-shvin-dig-kayts-be-gren-tsung", acceptedPronunciations: ["geschwindigkeitsbegrenzung", "gesh win dig kites be grenz ung"] },
-  { id: "h6", word: "Eichhörnchen", language: "German", country: "Germany", countryFlag: "🇩🇪", difficulty: "hard", pronunciation: "aykh-hörn-khen", acceptedPronunciations: ["eichhornchen", "eye horn can", "ike heron can", "ike horn shin"] },
-  { id: "h7", word: "Brötchen", language: "German", country: "Germany", countryFlag: "🇩🇪", difficulty: "hard", pronunciation: "bröt-khen", acceptedPronunciations: ["brotchen", "brute shin", "bro chin", "brought shin"] },
+  { id: "h6", word: "Eichhörnchen", language: "German", country: "Germany", countryFlag: "🇩🇪", difficulty: "hard", pronunciation: "aykh-hörn-khen", acceptedPronunciations: ["eichhornchen", "eye horn can", "ike heron can", "ike horn shin", "eichhörnchen"] },
+  { id: "h7", word: "Brötchen", language: "German", country: "Germany", countryFlag: "🇩🇪", difficulty: "hard", pronunciation: "bröt-khen", acceptedPronunciations: ["brotchen", "brute shin", "bro chin", "brought shin", "brötchen"] },
 
   // Czech
   { id: "h8", word: "Zmrzlina", language: "Czech", country: "Czech Republic", countryFlag: "🇨🇿", difficulty: "hard", pronunciation: "zmrz-li-na", acceptedPronunciations: ["zmrzlina", "zmerzlina", "smrzlina", "z merz lena"] },
-  { id: "h9", word: "Třistatřicettři", language: "Czech", country: "Czech Republic", countryFlag: "🇨🇿", difficulty: "hard", pronunciation: "trshi-sta-trshi-tset-trshi", acceptedPronunciations: ["tristatricettri", "tree sta tree set tree", "trista tree chet tree"] },
+  { id: "h9", word: "Třistatřicettři", language: "Czech", country: "Czech Republic", countryFlag: "🇨🇿", difficulty: "hard", pronunciation: "trshi-sta-trshi-tset-trshi", acceptedPronunciations: ["tristatricettri", "tree sta tree set tree", "trista tree chet tree", "třistatřicettři"] },
   { id: "h10", word: "Strč prst skrz krk", language: "Czech", country: "Czech Republic", countryFlag: "🇨🇿", difficulty: "hard", pronunciation: "strch-prst-skrz-krk", acceptedPronunciations: ["strc prst skrz krk", "stretch per st scares kirk", "search first skirts kirk"] },
 
   // Welsh
   { id: "h11", word: "Llanfairpwllgwyngyll", language: "Welsh", country: "Wales", countryFlag: "🏴󠁧󠁢󠁷󠁬󠁳󠁿", difficulty: "hard", pronunciation: "hlan-vire-poohl-gwin-gihl", acceptedPronunciations: ["llanfairpwllgwyngyll", "clan fair pool gwen gill", "lan fire pool gwyn gill"] },
 
   // Danish
-  { id: "h12", word: "Rødgrød med fløde", language: "Danish", country: "Denmark", countryFlag: "🇩🇰", difficulty: "hard", pronunciation: "roeth-groeth meth floe-the", acceptedPronunciations: ["rodgrod med flode", "rude grew med flew the", "ruhd grud med flude"] },
+  { id: "h12", word: "Rødgrød med fløde", language: "Danish", country: "Denmark", countryFlag: "🇩🇰", difficulty: "hard", pronunciation: "roeth-groeth meth floe-the", acceptedPronunciations: ["rodgrod med flode", "rude grew med flew the", "ruhd grud med flude", "rødgrød med fløde"] },
   { id: "h13", word: "Speciallægepraksisplanlægningsstabiliseringsperiode", language: "Danish", country: "Denmark", countryFlag: "🇩🇰", difficulty: "hard", pronunciation: "spe-si-al-le-ge...", acceptedPronunciations: ["speciallaegepraksisplanlaegningsstabiliseringsperiode", "special lego practice"] },
 
   // Polish
-  { id: "h14", word: "Szczęście", language: "Polish", country: "Poland", countryFlag: "🇵🇱", difficulty: "hard", pronunciation: "sh-chen-shche", acceptedPronunciations: ["szczescie", "shchenshche", "sh chen shay", "tension shay"] },
-  { id: "h15", word: "Chrząszcz", language: "Polish", country: "Poland", countryFlag: "🇵🇱", difficulty: "hard", pronunciation: "khshonshch", acceptedPronunciations: ["chrzaszcz", "khshonshch", "hjonch", "harsh inch"] },
+  { id: "h14", word: "Szczęście", language: "Polish", country: "Poland", countryFlag: "🇵🇱", difficulty: "hard", pronunciation: "sh-chen-shche", acceptedPronunciations: ["szczescie", "shchenshche", "sh chen shay", "tension shay", "szczęście"] },
+  { id: "h15", word: "Chrząszcz", language: "Polish", country: "Poland", countryFlag: "🇵🇱", difficulty: "hard", pronunciation: "khshonshch", acceptedPronunciations: ["chrzaszcz", "khshonshch", "hjonch", "harsh inch", "chrząszcz"] },
   { id: "h16", word: "Grzegorz", language: "Polish", country: "Poland", countryFlag: "🇵🇱", difficulty: "hard", pronunciation: "gzhe-gozh", acceptedPronunciations: ["grzegorz", "gre gosh", "gray gosh", "zheh gosh"] },
 
   // Hungarian
-  { id: "h17", word: "Egészségedre", language: "Hungarian", country: "Hungary", countryFlag: "🇭🇺", difficulty: "hard", pronunciation: "e-ges-she-ged-re", acceptedPronunciations: ["egessegedre", "egg esh shag ed ray", "a guess shay geh dre"] },
-  { id: "h18", word: "Megszentségteleníthetetlenségeskedéseitekért", language: "Hungarian", country: "Hungary", countryFlag: "🇭🇺", difficulty: "hard", pronunciation: "meg-sent-sheg...", acceptedPronunciations: ["megszentsegtelenithetetlensegeskedeseitekert", "mega sent shag"] },
+  { id: "h17", word: "Egészségedre", language: "Hungarian", country: "Hungary", countryFlag: "🇭🇺", difficulty: "hard", pronunciation: "e-ges-she-ged-re", acceptedPronunciations: ["egessegedre", "egg esh shag ed ray", "a guess shay geh dre", "egészségedre"] },
+  { id: "h18", word: "Megszentségteleníthetetlenségeskedéseitekért", language: "Hungarian", country: "Hungary", countryFlag: "🇭🇺", difficulty: "hard", pronunciation: "meg-sent-sheg...", acceptedPronunciations: ["megszentsegtelenithetetlensegeskedeseitekert", "mega sent shag", "megszentségteleníthetetlenségeskedéseitekért"] },
 
   // Icelandic
-  { id: "h19", word: "Eyjafjallajökull", language: "Icelandic", country: "Iceland", countryFlag: "🇮🇸", difficulty: "hard", pronunciation: "ay-ya-fyat-la-yo-kutl", acceptedPronunciations: ["eyjafjallajokull", "aya fyat la yo cool", "a a fettle a yo kuttle"] },
-  { id: "h20", word: "Þjóðvegur", language: "Icelandic", country: "Iceland", countryFlag: "🇮🇸", difficulty: "hard", pronunciation: "thyoth-ve-gur", acceptedPronunciations: ["thjodvegur", "the old vay gur", "theo vegur", "theo they go"] },
+  { id: "h19", word: "Eyjafjallajökull", language: "Icelandic", country: "Iceland", countryFlag: "🇮🇸", difficulty: "hard", pronunciation: "ay-ya-fyat-la-yo-kutl", acceptedPronunciations: ["eyjafjallajokull", "aya fyat la yo cool", "a a fettle a yo kuttle", "eyjafjallajökull"] },
+  { id: "h20", word: "Þjóðvegur", language: "Icelandic", country: "Iceland", countryFlag: "🇮🇸", difficulty: "hard", pronunciation: "thyoth-ve-gur", acceptedPronunciations: ["thjodvegur", "the old vay gur", "theo vegur", "theo they go", "þjóðvegur"] },
 
   // Finnish
-  { id: "h21", word: "Epäjärjestelmällisyys", language: "Finnish", country: "Finland", countryFlag: "🇫🇮", difficulty: "hard", pronunciation: "e-pä-yär-yes-tel-mäl-li-syys", acceptedPronunciations: ["epajarjestelmallistys", "app a your yes tell my lease use"] },
-  { id: "h22", word: "Hääyöaie", language: "Finnish", country: "Finland", countryFlag: "🇫🇮", difficulty: "hard", pronunciation: "haa-ü-ö-ai-e", acceptedPronunciations: ["haayoaie", "ha you eye yeah", "hi you aye a", "ha a yo i a"] },
+  { id: "h21", word: "Epäjärjestelmällisyys", language: "Finnish", country: "Finland", countryFlag: "🇫🇮", difficulty: "hard", pronunciation: "e-pä-yär-yes-tel-mäl-li-syys", acceptedPronunciations: ["epajarjestelmallistys", "app a your yes tell my lease use", "epäjärjestelmällisyys"] },
+  { id: "h22", word: "Hääyöaie", language: "Finnish", country: "Finland", countryFlag: "🇫🇮", difficulty: "hard", pronunciation: "haa-ü-ö-ai-e", acceptedPronunciations: ["haayoaie", "ha you eye yeah", "hi you aye a", "ha a yo i a", "hääyöaie"] },
 
   // Thai
   { id: "h23", word: "Krungthepmahanakhon", language: "Thai", country: "Thailand", countryFlag: "🇹🇭", difficulty: "hard", pronunciation: "krung-tep-ma-ha-na-khon", acceptedPronunciations: ["krungthepmahanakhon", "crunk tep ma ha nah cone", "krung tep maha nakhon"] },
@@ -330,12 +330,12 @@ export const wordDatabase: Word[] = [
   { id: "h28", word: "Yáʼátʼééh", language: "Navajo", country: "USA", countryFlag: "🇺🇸", difficulty: "hard", pronunciation: "yah-ah-teh", acceptedPronunciations: ["yaateeh", "yah at a", "ya ta hey", "yeah at a"] },
 
   // Mandarin tones
-  { id: "h29", word: "Māmā mà mǎ ma", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "hard", pronunciation: "ma-ma-ma-ma-ma", acceptedPronunciations: ["mama ma ma ma", "mama mama ma", "ma ma ma ma ma"] },
-  { id: "h30", word: "Huǒchēzhàn", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "hard", pronunciation: "hwo-che-jan", acceptedPronunciations: ["huochezhan", "who a chuh john", "war chair john", "watch a john"] },
+  { id: "h29", word: "Māmā mà mǎ ma", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "hard", pronunciation: "ma-ma-ma-ma-ma", acceptedPronunciations: ["mama ma ma ma", "mama mama ma", "ma ma ma ma ma", "妈妈骂马吗"] },
+  { id: "h30", word: "Huǒchēzhàn", language: "Chinese", country: "China", countryFlag: "🇨🇳", difficulty: "hard", pronunciation: "hwo-che-jan", acceptedPronunciations: ["huochezhan", "who a chuh john", "war chair john", "watch a john", "火车站"] },
 
   // Vietnamese tones
-  { id: "h31", word: "Phở", language: "Vietnamese", country: "Vietnam", countryFlag: "🇻🇳", difficulty: "hard", pronunciation: "fuh", acceptedPronunciations: ["pho", "fur", "fuh", "fa"] },
-  { id: "h32", word: "Nguyễn", language: "Vietnamese", country: "Vietnam", countryFlag: "🇻🇳", difficulty: "hard", pronunciation: "nwin", acceptedPronunciations: ["nguyen", "win", "new in", "nwin"] },
+  { id: "h31", word: "Phở", language: "Vietnamese", country: "Vietnam", countryFlag: "🇻🇳", difficulty: "hard", pronunciation: "fuh", acceptedPronunciations: ["pho", "fur", "fuh", "fa", "phở"] },
+  { id: "h32", word: "Nguyễn", language: "Vietnamese", country: "Vietnam", countryFlag: "🇻🇳", difficulty: "hard", pronunciation: "nwin", acceptedPronunciations: ["nguyen", "win", "new in", "nwin", "nguyễn"] },
 
   // Georgian
   { id: "h33", word: "Gvprtskvnis", language: "Georgian", country: "Georgia", countryFlag: "🇬🇪", difficulty: "hard", pronunciation: "gv-prts-kv-nis", acceptedPronunciations: ["gvprtskvnis", "gopher skins", "go parts give knees"] },
@@ -365,7 +365,7 @@ export const wordDatabase: Word[] = [
   { id: "h41", word: "Nagode", language: "Hausa", country: "Nigeria", countryFlag: "🇳🇬", difficulty: "hard", pronunciation: "na-go-de", acceptedPronunciations: ["nagode", "na go day", "nah go day"] },
 
   // Azerbaijani
-  { id: "h42", word: "Təşəkkür edirəm", language: "Azerbaijani", country: "Azerbaijan", countryFlag: "🇦🇿", difficulty: "hard", pronunciation: "teh-shek-kur-ed-i-rem", acceptedPronunciations: ["tesekkur edirem", "tesh a cure add a rem", "ta sha cure eddy rem"] },
+  { id: "h42", word: "Təşəkkür edirəm", language: "Azerbaijani", country: "Azerbaijan", countryFlag: "🇦🇿", difficulty: "hard", pronunciation: "teh-shek-kur-ed-i-rem", acceptedPronunciations: ["tesekkur edirem", "tesh a cure add a rem", "ta sha cure eddy rem", "təşəkkür edirəm"] },
 
   // Lao
   { id: "h43", word: "Sabaidee", language: "Lao", country: "Laos", countryFlag: "🇱🇦", difficulty: "hard", pronunciation: "sa-bai-dee", acceptedPronunciations: ["sabaidee", "sub by dee", "so by dee", "sa bye dee"] },
@@ -386,10 +386,10 @@ export const wordDatabase: Word[] = [
   { id: "h48", word: "Khotso", language: "Sesotho", country: "Lesotho", countryFlag: "🇱🇸", difficulty: "hard", pronunciation: "khot-so", acceptedPronunciations: ["khotso", "coat so", "caught so", "kot so"] },
 
   // Slovenian
-  { id: "h49", word: "Najlepša hvala", language: "Slovenian", country: "Slovenia", countryFlag: "🇸🇮", difficulty: "hard", pronunciation: "nay-lep-sha-hva-la", acceptedPronunciations: ["najlepsa hvala", "nigh left holla", "nigh lep sha follow"] },
+  { id: "h49", word: "Najlepša hvala", language: "Slovenian", country: "Slovenia", countryFlag: "🇸🇮", difficulty: "hard", pronunciation: "nay-lep-sha-hva-la", acceptedPronunciations: ["najlepsa hvala", "nigh left holla", "nigh lep sha follow", "najlepša hvala"] },
 
   // Slovak
-  { id: "h50", word: "Ďakujem pekne", language: "Slovak", country: "Slovakia", countryFlag: "🇸🇰", difficulty: "hard", pronunciation: "dya-ku-yem-pek-ne", acceptedPronunciations: ["dakujem pekne", "jack who yam peck nay", "the coup yam pack ne"] },
+  { id: "h50", word: "Ďakujem pekne", language: "Slovak", country: "Slovakia", countryFlag: "🇸🇰", difficulty: "hard", pronunciation: "dya-ku-yem-pek-ne", acceptedPronunciations: ["dakujem pekne", "jack who yam peck nay", "the coup yam pack ne", "ďakujem pekne"] },
 
   // Macedonian
   { id: "h51", word: "Blagodaram", language: "Macedonian", country: "North Macedonia", countryFlag: "🇲🇰", difficulty: "hard", pronunciation: "bla-go-da-ram", acceptedPronunciations: ["blagodaram", "blog a dah rom", "blog go da ram"] },

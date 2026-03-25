@@ -10,14 +10,16 @@ import {
   Dimensions,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList, Word } from "../types";
+import { RootStackParamList, Word, WordResult } from "../types";
 import { getRandomWords } from "../data/words";
+import { showAdIfReady, loadAd } from "../services/adService";
 import {
   checkPronunciation,
   startListening,
   stopListening,
   useSpeechRecognitionEvent,
   getLocaleForLanguage,
+  getCurrentLang,
 } from "../services/speechService";
 import Twemoji from "../components/Twemoji";
 
@@ -37,6 +39,8 @@ export default function SoloGameScreen({ route, navigation }: Props) {
   const [spokenText, setSpokenText] = useState<string>("");
   const [timeLeft, setTimeLeft] = useState(15);
   const [streak, setStreak] = useState(0);
+  const wordResultsRef = useRef<WordResult[]>([]);
+  const lastAudioUriRef = useRef<string | null>(null);
 
   // Animations
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -129,6 +133,19 @@ export default function SoloGameScreen({ route, navigation }: Props) {
     ).start();
   }, []);
 
+  // Capture recorded audio URI from both audiostart and audioend
+  useSpeechRecognitionEvent("audiostart", (event: any) => {
+    if (event?.uri) {
+      lastAudioUriRef.current = event.uri;
+    }
+  });
+
+  useSpeechRecognitionEvent("audioend", (event: any) => {
+    if (event?.uri) {
+      lastAudioUriRef.current = event.uri;
+    }
+  });
+
   // Speech recognition events
   useSpeechRecognitionEvent("result", (event) => {
     if (pendingNextRef.current) return;
@@ -145,8 +162,28 @@ export default function SoloGameScreen({ route, navigation }: Props) {
       // Check ALL alternatives from STT, not just the first one
       const allTranscripts = event.results.map((r: any) => r?.transcript || "").filter(Boolean);
       const correct = allTranscripts.some((t: string) =>
-        checkPronunciation(t, currentWord.acceptedPronunciations)
+        checkPronunciation(t, currentWord.acceptedPronunciations, currentWord.language)
       );
+
+      // Push result - audioUri may arrive later via audioend event
+      const resultEntry = {
+        word: currentWord,
+        correct,
+        spokenText: transcript,
+        audioUri: lastAudioUriRef.current || undefined,
+      };
+      wordResultsRef.current.push(resultEntry);
+      // If audioUri not yet available, patch it after a short delay
+      if (!resultEntry.audioUri) {
+        setTimeout(() => {
+          if (lastAudioUriRef.current) {
+            resultEntry.audioUri = lastAudioUriRef.current;
+            lastAudioUriRef.current = null;
+          }
+        }, 500);
+      } else {
+        lastAudioUriRef.current = null;
+      }
 
       if (correct) {
         Animated.sequence([
@@ -160,12 +197,24 @@ export default function SoloGameScreen({ route, navigation }: Props) {
 
       setTimeout(() => {
         pendingNextRef.current = false;
-        goNext(correct);
+        goNext(correct, true);
       }, 1200);
     }
   });
 
-  useSpeechRecognitionEvent("error", () => {
+  const retryCountRef = useRef(0);
+
+  useSpeechRecognitionEvent("error", async (event) => {
+    console.log("STT error:", event.error);
+    // If locale not supported, retry with en-US
+    if (retryCountRef.current === 0 && getCurrentLang() !== "en-US") {
+      retryCountRef.current = 1;
+      try {
+        await startListening("en-US", true);
+        return;
+      } catch {}
+    }
+    retryCountRef.current = 0;
     setIsRecording(false);
     setIsProcessing(false);
     pulseAnim.setValue(1);
@@ -173,9 +222,12 @@ export default function SoloGameScreen({ route, navigation }: Props) {
   });
 
   useSpeechRecognitionEvent("end", () => {
-    setIsRecording(false);
-    setIsProcessing(false);
-    pulseAnim.setValue(1);
+    // Only reset if we're not in the middle of a retry or pending result
+    if (!pendingNextRef.current && retryCountRef.current === 0) {
+      setIsRecording(false);
+      setIsProcessing(false);
+      pulseAnim.setValue(1);
+    }
   });
 
   // Word entrance animation
@@ -201,17 +253,40 @@ export default function SoloGameScreen({ route, navigation }: Props) {
   }, [currentIndex]);
 
   const goNext = useCallback(
-    (correct: boolean) => {
+    (correct: boolean, skipRecord?: boolean) => {
       if (correct) {
         setScore((s) => s + 1);
         setStreak((s) => s + 1);
       } else {
         setStreak(0);
       }
+      // Record timeout/skip if not already recorded by STT handler
+      if (!skipRecord && words[currentIndex]) {
+        const alreadyRecorded = wordResultsRef.current.some(
+          (r) => r.word.id === words[currentIndex].id
+        );
+        if (!alreadyRecorded) {
+          wordResultsRef.current.push({
+            word: words[currentIndex],
+            correct,
+            spokenText: "",
+          });
+        }
+      }
       const nextIndex = currentIndex + 1;
       if (nextIndex >= words.length) {
         const finalScore = correct ? score + 1 : score;
-        navigation.replace("SoloResult", { score: finalScore, total: words.length, difficulty });
+        // Show ad, then navigate to results
+        setTimeout(async () => {
+          await showAdIfReady();
+          loadAd(); // Preload next ad
+          navigation.replace("SoloResult", {
+            score: finalScore,
+            total: words.length,
+            difficulty,
+            wordResults: wordResultsRef.current,
+          });
+        }, 600);
       } else {
         setCurrentIndex(nextIndex);
         setSpokenText("");
@@ -259,13 +334,19 @@ export default function SoloGameScreen({ route, navigation }: Props) {
     if (!isRecording) {
       setIsRecording(true);
       setSpokenText("");
+      retryCountRef.current = 0;
+      lastAudioUriRef.current = null;
       const locale = getLocaleForLanguage(currentWord.language);
       try {
-        await startListening(locale);
+        await startListening(locale, true);
       } catch {
-        setIsRecording(false);
-        showFeedback("Mikrofon hatası!", false);
-        return;
+        try {
+          await startListening("en-US", true);
+        } catch {
+          setIsRecording(false);
+          showFeedback("Mikrofon hatası!", false);
+          return;
+        }
       }
       Animated.loop(
         Animated.sequence([

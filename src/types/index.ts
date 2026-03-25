@@ -29,6 +29,8 @@ export interface GameState {
   round: number;
   maxRounds: number;
   winner?: string;
+  skipVotes?: { [playerId: string]: boolean };
+  wordOutcomes?: { [wordIndex: string]: { answeredBy: string | null; skipped?: boolean } };
   createdAt: number;
 }
 
@@ -43,12 +45,19 @@ export interface LobbyRoom {
 
 export type GameMode = "solo" | "online";
 
+export interface WordResult {
+  word: Word;
+  correct: boolean;
+  spokenText: string;
+  audioUri?: string;
+}
+
 export type RootStackParamList = {
   Home: undefined;
   ModeSelect: { difficulty: Difficulty };
   Lobby: { difficulty: Difficulty };
   Game: { gameId: string; playerId: string };
   SoloGame: { difficulty: Difficulty };
-  SoloResult: { score: number; total: number; difficulty: Difficulty };
+  SoloResult: { score: number; total: number; difficulty: Difficulty; wordResults: WordResult[] };
   Result: { gameId: string; playerId: string };
 };
