@@ -52,6 +52,7 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
 
       {/* Solo Mode */}
       <Animated.View
+        pointerEvents="box-none"
         style={{
           opacity: soloAnim,
           transform: [
@@ -64,6 +65,7 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
           style={styles.modeCard}
           onPress={() => navigation.navigate("SoloGame", { difficulty })}
           activeOpacity={0.75}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <View style={[styles.modeIconWrap, { backgroundColor: "rgba(233,69,96,0.15)" }]}>
             <Twemoji emoji="🎯" size={36} />
@@ -80,6 +82,7 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
 
       {/* Online Mode */}
       <Animated.View
+        pointerEvents="box-none"
         style={{
           opacity: onlineAnim,
           transform: [
@@ -92,6 +95,7 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
           style={[styles.modeCard, styles.modeCardOnline]}
           onPress={() => navigation.navigate("Lobby", { difficulty })}
           activeOpacity={0.75}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <View style={[styles.modeIconWrap, { backgroundColor: "rgba(15,52,96,0.3)" }]}>
             <Twemoji emoji="⚔️" size={36} />

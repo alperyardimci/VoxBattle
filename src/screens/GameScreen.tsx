@@ -320,7 +320,7 @@ export default function GameScreen({ route, navigation }: Props) {
 
       {/* Mic Button */}
       <View style={styles.micArea}>
-        <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+        <Animated.View style={{ transform: [{ scale: pulseAnim }] }} pointerEvents="box-none">
           <TouchableOpacity
             style={[
               styles.micButton,
@@ -330,6 +330,7 @@ export default function GameScreen({ route, navigation }: Props) {
             onPress={handleMicPress}
             disabled={!isMyTurn || isProcessing}
             activeOpacity={0.7}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Twemoji emoji={isProcessing ? "⏳" : isRecording ? "⏹️" : "🎙️"} size={40} />
           </TouchableOpacity>

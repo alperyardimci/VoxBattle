@@ -7,7 +7,7 @@ import {
   Animated,
   Vibration,
   Platform,
-  Dimensions,
+  useWindowDimensions,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, Word, WordResult } from "../types";
@@ -25,10 +25,10 @@ import Twemoji from "../components/Twemoji";
 
 type Props = NativeStackScreenProps<RootStackParamList, "SoloGame">;
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const TOTAL_ROUNDS = 10;
 
 export default function SoloGameScreen({ route, navigation }: Props) {
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { difficulty } = route.params;
   const [words] = useState<Word[]>(() => getRandomWords(difficulty, TOTAL_ROUNDS));
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -507,12 +507,13 @@ export default function SoloGameScreen({ route, navigation }: Props) {
             isRecording && { backgroundColor: "#F44336" },
           ]}
         />
-        <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+        <Animated.View style={{ transform: [{ scale: pulseAnim }] }} pointerEvents="box-none">
           <TouchableOpacity
             style={[styles.micButton, isRecording && styles.micButtonRecording]}
             onPress={handleMicPress}
             disabled={isProcessing || pendingNextRef.current}
             activeOpacity={0.7}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             {isProcessing ? (
               <Twemoji emoji="⏳" size={44} />
@@ -533,7 +534,7 @@ export default function SoloGameScreen({ route, navigation }: Props) {
       </View>
 
       {/* Skip Button - styled as real button */}
-      <Animated.View style={{ transform: [{ translateX: skipBounce }] }}>
+      <Animated.View style={{ transform: [{ translateX: skipBounce }] }} pointerEvents="box-none">
         <TouchableOpacity
           style={styles.skipButton}
           onPress={() => {

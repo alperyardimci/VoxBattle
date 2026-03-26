@@ -1,0 +1,20 @@
+{
+  "rules": {
+    "lobby": {
+      ".read": true,
+      "$roomId": {
+        ".write": true
+      }
+    },
+    "games": {
+      "$gameId": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "$other": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}

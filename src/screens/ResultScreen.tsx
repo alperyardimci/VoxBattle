@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Animated,
-  Dimensions,
+  useWindowDimensions,
   ScrollView,
 } from "react-native";
 import * as Speech from "expo-speech";
@@ -16,9 +16,9 @@ import { getLocaleForLanguage } from "../services/speechService";
 import Twemoji from "../components/Twemoji";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Result">;
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function ResultScreen({ route, navigation }: Props) {
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { gameId, playerId } = route.params;
   const [game, setGame] = useState<GameState | null>(null);
   const [speakingId, setSpeakingId] = useState<string | null>(null);

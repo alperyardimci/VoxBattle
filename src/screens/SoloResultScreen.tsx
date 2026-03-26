@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Animated,
-  Dimensions,
+  useWindowDimensions,
   ScrollView,
 } from "react-native";
 import * as Speech from "expo-speech";
@@ -16,7 +16,6 @@ import { getLocaleForLanguage } from "../services/speechService";
 import Twemoji from "../components/Twemoji";
 
 type Props = NativeStackScreenProps<RootStackParamList, "SoloResult">;
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 function getRank(pct: number) {
   if (pct >= 90) return { emoji: "🏆", label: "Telaffuz Ustası!", color: "#FFD700" };
@@ -27,6 +26,7 @@ function getRank(pct: number) {
 }
 
 export default function SoloResultScreen({ route, navigation }: Props) {
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { score, total, difficulty, wordResults } = route.params;
   const pct = Math.round((score / total) * 100);
   const rank = getRank(pct);

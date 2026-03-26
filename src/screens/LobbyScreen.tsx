@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Animated,
   Easing,
-  Dimensions,
+  useWindowDimensions,
   TouchableOpacity,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -22,9 +22,9 @@ import {
 import Twemoji from "../components/Twemoji";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Lobby">;
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function LobbyScreen({ route, navigation }: Props) {
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const { difficulty } = route.params;
   const [status, setStatus] = useState<string>("Rakip aranıyor...");
   const [playerInfo, setPlayerInfo] = useState<{ id: string; name: string } | null>(null);

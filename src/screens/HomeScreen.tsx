@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Animated,
-  Dimensions,
+  useWindowDimensions,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, Difficulty } from "../types";
@@ -13,7 +13,6 @@ import { requestMicrophonePermission } from "../services/speechService";
 import Twemoji from "../components/Twemoji";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
-const { width, height } = Dimensions.get("window");
 
 const DIFFICULTIES: {
   key: Difficulty;
@@ -28,6 +27,7 @@ const DIFFICULTIES: {
 ];
 
 export default function HomeScreen({ navigation }: Props) {
+  const { width, height } = useWindowDimensions();
   const titleScale = useRef(new Animated.Value(0)).current;
   const titleOpacity = useRef(new Animated.Value(0)).current;
   const subtitleSlide = useRef(new Animated.Value(30)).current;
@@ -140,6 +140,7 @@ export default function HomeScreen({ navigation }: Props) {
         {DIFFICULTIES.map((diff, i) => (
           <Animated.View
             key={diff.key}
+            pointerEvents="box-none"
             style={{
               opacity: buttonAnims[i],
               transform: [
@@ -162,6 +163,7 @@ export default function HomeScreen({ navigation }: Props) {
               style={[styles.diffButton, { borderLeftColor: diff.color, borderLeftWidth: 4 }]}
               onPress={() => handlePlay(diff.key)}
               activeOpacity={0.75}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <View style={styles.diffLeft}>
                 <Twemoji emoji={diff.emoji} size={24} />
