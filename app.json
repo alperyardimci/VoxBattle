@@ -12,9 +12,9 @@
       "backgroundColor": "#0a0a1a"
     },
     "ios": {
-      "supportsTablet": false,
+      "supportsTablet": true,
       "bundleIdentifier": "com.alperyardimci.VoxBattle",
-      "buildNumber": "6",
+      "buildNumber": "7",
       "infoPlist": {
         "NSSpeechRecognitionUsageDescription": "Telaffuz ettiğiniz kelimeleri değerlendirmek için konuşma tanıma kullanılmaktadır.",
         "NSMicrophoneUsageDescription": "Telaffuzunuzu dinlemek için mikrofon erişimi gerekmektedir.",
