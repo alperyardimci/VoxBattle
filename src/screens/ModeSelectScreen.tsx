@@ -12,16 +12,10 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
   const diffEmoji = difficulty === "easy" ? "🟢" : difficulty === "medium" ? "🟡" : "🔴";
 
   const titleAnim = useRef(new Animated.Value(0)).current;
-  const soloAnim = useRef(new Animated.Value(0)).current;
-  const onlineAnim = useRef(new Animated.Value(0)).current;
   const floatAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.stagger(150, [
-      Animated.spring(titleAnim, { toValue: 1, friction: 5, tension: 60, useNativeDriver: true }),
-      Animated.spring(soloAnim, { toValue: 1, friction: 5, tension: 50, useNativeDriver: true }),
-      Animated.spring(onlineAnim, { toValue: 1, friction: 5, tension: 50, useNativeDriver: true }),
-    ]).start();
+    Animated.spring(titleAnim, { toValue: 1, friction: 5, tension: 60, useNativeDriver: true }).start();
 
     Animated.loop(
       Animated.sequence([
@@ -51,64 +45,42 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
       </Animated.View>
 
       {/* Solo Mode */}
-      <Animated.View
-        pointerEvents="box-none"
-        style={{
-          opacity: soloAnim,
-          transform: [
-            { translateX: soloAnim.interpolate({ inputRange: [0, 1], outputRange: [-100, 0] }) },
-          ],
-          width: "100%",
-        }}
+      <TouchableOpacity
+        style={styles.modeCard}
+        onPress={() => navigation.navigate("SoloGame", { difficulty })}
+        activeOpacity={0.75}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
-        <TouchableOpacity
-          style={styles.modeCard}
-          onPress={() => navigation.navigate("SoloGame", { difficulty })}
-          activeOpacity={0.75}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <View style={[styles.modeIconWrap, { backgroundColor: "rgba(233,69,96,0.15)" }]}>
-            <Twemoji emoji="🎯" size={36} />
-          </View>
-          <View style={styles.modeContent}>
-            <Text style={styles.modeLabel}>Tek Kişilik</Text>
-            <Text style={styles.modeDesc}>Kendin pratik yap, skorunu geliştir</Text>
-          </View>
-          <View style={[styles.modeArrow, { backgroundColor: "#e94560" }]}>
-            <Text style={styles.modeArrowText}>›</Text>
-          </View>
-        </TouchableOpacity>
-      </Animated.View>
+        <View style={[styles.modeIconWrap, { backgroundColor: "rgba(233,69,96,0.15)" }]}>
+          <Twemoji emoji="🎯" size={36} />
+        </View>
+        <View style={styles.modeContent}>
+          <Text style={styles.modeLabel}>Tek Kişilik</Text>
+          <Text style={styles.modeDesc}>Kendin pratik yap, skorunu geliştir</Text>
+        </View>
+        <View style={[styles.modeArrow, { backgroundColor: "#e94560" }]}>
+          <Text style={styles.modeArrowText}>›</Text>
+        </View>
+      </TouchableOpacity>
 
       {/* Online Mode */}
-      <Animated.View
-        pointerEvents="box-none"
-        style={{
-          opacity: onlineAnim,
-          transform: [
-            { translateX: onlineAnim.interpolate({ inputRange: [0, 1], outputRange: [100, 0] }) },
-          ],
-          width: "100%",
-        }}
+      <TouchableOpacity
+        style={[styles.modeCard, styles.modeCardOnline]}
+        onPress={() => navigation.navigate("Lobby", { difficulty })}
+        activeOpacity={0.75}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
-        <TouchableOpacity
-          style={[styles.modeCard, styles.modeCardOnline]}
-          onPress={() => navigation.navigate("Lobby", { difficulty })}
-          activeOpacity={0.75}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <View style={[styles.modeIconWrap, { backgroundColor: "rgba(15,52,96,0.3)" }]}>
-            <Twemoji emoji="⚔️" size={36} />
-          </View>
-          <View style={styles.modeContent}>
-            <Text style={styles.modeLabel}>Online Düello</Text>
-            <Text style={styles.modeDesc}>Rakip bul ve düello yap</Text>
-          </View>
-          <View style={[styles.modeArrow, { backgroundColor: "#0f3460" }]}>
-            <Text style={styles.modeArrowText}>›</Text>
-          </View>
-        </TouchableOpacity>
-      </Animated.View>
+        <View style={[styles.modeIconWrap, { backgroundColor: "rgba(15,52,96,0.3)" }]}>
+          <Twemoji emoji="⚔️" size={36} />
+        </View>
+        <View style={styles.modeContent}>
+          <Text style={styles.modeLabel}>Online Düello</Text>
+          <Text style={styles.modeDesc}>Rakip bul ve düello yap</Text>
+        </View>
+        <View style={[styles.modeArrow, { backgroundColor: "#0f3460" }]}>
+          <Text style={styles.modeArrowText}>›</Text>
+        </View>
+      </TouchableOpacity>
 
       {/* Back */}
       <View style={{ marginTop: 24 }}>

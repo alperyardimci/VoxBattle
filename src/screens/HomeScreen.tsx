@@ -31,7 +31,6 @@ export default function HomeScreen({ navigation }: Props) {
   const titleScale = useRef(new Animated.Value(0)).current;
   const titleOpacity = useRef(new Animated.Value(0)).current;
   const subtitleSlide = useRef(new Animated.Value(30)).current;
-  const buttonAnims = useRef(DIFFICULTIES.map(() => new Animated.Value(0))).current;
   const footerAnim = useRef(new Animated.Value(0)).current;
   const floatAnim = useRef(new Animated.Value(0)).current;
   const [hasMicPermission, setHasMicPermission] = useState(false);
@@ -56,12 +55,6 @@ export default function HomeScreen({ navigation }: Props) {
         Animated.timing(titleOpacity, { toValue: 1, duration: 600, useNativeDriver: true }),
       ]),
       Animated.timing(subtitleSlide, { toValue: 0, duration: 400, useNativeDriver: true }),
-      Animated.stagger(
-        120,
-        buttonAnims.map((anim) =>
-          Animated.spring(anim, { toValue: 1, friction: 5, tension: 60, useNativeDriver: true })
-        )
-      ),
       Animated.timing(footerAnim, { toValue: 1, duration: 500, useNativeDriver: true }),
     ]).start();
 
@@ -137,46 +130,25 @@ export default function HomeScreen({ navigation }: Props) {
       {/* Difficulty buttons */}
       <View style={styles.diffContainer}>
         <Text style={styles.sectionTitle}>ZORLUK SEVİYESİ SEÇ</Text>
-        {DIFFICULTIES.map((diff, i) => (
-          <Animated.View
+        {DIFFICULTIES.map((diff) => (
+          <TouchableOpacity
             key={diff.key}
-            pointerEvents="box-none"
-            style={{
-              opacity: buttonAnims[i],
-              transform: [
-                {
-                  translateX: buttonAnims[i].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [-80, 0],
-                  }),
-                },
-                {
-                  scale: buttonAnims[i].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0.8, 1],
-                  }),
-                },
-              ],
-            }}
+            style={[styles.diffButton, { borderLeftColor: diff.color, borderLeftWidth: 4 }]}
+            onPress={() => handlePlay(diff.key)}
+            activeOpacity={0.75}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <TouchableOpacity
-              style={[styles.diffButton, { borderLeftColor: diff.color, borderLeftWidth: 4 }]}
-              onPress={() => handlePlay(diff.key)}
-              activeOpacity={0.75}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <View style={styles.diffLeft}>
-                <Twemoji emoji={diff.emoji} size={24} />
-                <View style={styles.diffTextWrap}>
-                  <Text style={styles.diffLabel}>{diff.label}</Text>
-                  <Text style={styles.diffDesc}>{diff.desc}</Text>
-                </View>
+            <View style={styles.diffLeft}>
+              <Twemoji emoji={diff.emoji} size={24} />
+              <View style={styles.diffTextWrap}>
+                <Text style={styles.diffLabel}>{diff.label}</Text>
+                <Text style={styles.diffDesc}>{diff.desc}</Text>
               </View>
-              <View style={[styles.diffArrowCircle, { backgroundColor: diff.color }]}>
-                <Text style={styles.diffArrow}>›</Text>
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
+            </View>
+            <View style={[styles.diffArrowCircle, { backgroundColor: diff.color }]}>
+              <Text style={styles.diffArrow}>›</Text>
+            </View>
+          </TouchableOpacity>
         ))}
       </View>
 
