@@ -28,6 +28,7 @@ export default function ModeSelectScreen({ route, navigation }: Props) {
   return (
     <View style={styles.container}>
       <Animated.View
+        pointerEvents="none"
         style={[
           styles.titleArea,
           {

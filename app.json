@@ -14,7 +14,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.alperyardimci.VoxBattle",
-      "buildNumber": "7",
+      "buildNumber": "8",
       "infoPlist": {
         "NSSpeechRecognitionUsageDescription": "Telaffuz ettiğiniz kelimeleri değerlendirmek için konuşma tanıma kullanılmaktadır.",
         "NSMicrophoneUsageDescription": "Telaffuzunuzu dinlemek için mikrofon erişimi gerekmektedir.",

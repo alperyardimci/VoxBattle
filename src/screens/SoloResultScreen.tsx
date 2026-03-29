@@ -91,23 +91,26 @@ export default function SoloResultScreen({ route, navigation }: Props) {
   return (
     <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
       {/* Confetti */}
-      {pct >= 50 &&
-        confetti.map((c, i) => (
-          <Animated.View
-            key={i}
-            style={{
-              position: "absolute",
-              width: 8,
-              height: 8,
-              borderRadius: i % 2 === 0 ? 4 : 1,
-              backgroundColor: ["#e94560", "#4CAF50", "#FF9800", "#2196F3", "#FFD700"][i % 5],
-              transform: [{ translateX: c.x }, { translateY: c.y }, {
-                rotate: c.rot.interpolate({ inputRange: [0, 360], outputRange: ["0deg", "360deg"] }),
-              }],
-              opacity: c.opacity,
-            }}
-          />
-        ))}
+      {pct >= 50 && (
+        <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+          {confetti.map((c, i) => (
+            <Animated.View
+              key={i}
+              style={{
+                position: "absolute",
+                width: 8,
+                height: 8,
+                borderRadius: i % 2 === 0 ? 4 : 1,
+                backgroundColor: ["#e94560", "#4CAF50", "#FF9800", "#2196F3", "#FFD700"][i % 5],
+                transform: [{ translateX: c.x }, { translateY: c.y }, {
+                  rotate: c.rot.interpolate({ inputRange: [0, 360], outputRange: ["0deg", "360deg"] }),
+                }],
+                opacity: c.opacity,
+              }}
+            />
+          ))}
+        </View>
+      )}
 
       {/* Compact Score Header */}
       <Animated.View style={[styles.scoreHeader, { transform: [{ scale: cardScale }] }]}>

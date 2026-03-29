@@ -91,20 +91,22 @@ export default function HomeScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       {/* Particles */}
-      {particles.map((p, i) => (
-        <Animated.View
-          key={i}
-          style={{
-            position: "absolute",
-            width: p.size,
-            height: p.size,
-            borderRadius: p.size / 2,
-            backgroundColor: i % 3 === 0 ? "#e94560" : i % 3 === 1 ? "#0f3460" : "#533483",
-            transform: [{ translateX: p.x }, { translateY: p.y }],
-            opacity: p.opacity,
-          }}
-        />
-      ))}
+      <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+        {particles.map((p, i) => (
+          <Animated.View
+            key={i}
+            style={{
+              position: "absolute",
+              width: p.size,
+              height: p.size,
+              borderRadius: p.size / 2,
+              backgroundColor: i % 3 === 0 ? "#e94560" : i % 3 === 1 ? "#0f3460" : "#533483",
+              transform: [{ translateX: p.x }, { translateY: p.y }],
+              opacity: p.opacity,
+            }}
+          />
+        ))}
+      </View>
 
       {/* Title */}
       <Animated.View
@@ -153,7 +155,7 @@ export default function HomeScreen({ navigation }: Props) {
       </View>
 
       {/* How to Play */}
-      <Animated.View style={[styles.htpCard, { opacity: footerAnim }]}>
+      <Animated.View pointerEvents="none" style={[styles.htpCard, { opacity: footerAnim }]}>
         <Text style={styles.htpTitle}>NASIL OYNANIR?</Text>
         <View style={styles.htpSteps}>
           <View style={styles.htpStep}>
@@ -230,6 +232,7 @@ const styles = StyleSheet.create({
   diffContainer: {
     width: "100%",
     marginBottom: 28,
+    zIndex: 10,
   },
   sectionTitle: {
     fontSize: 12,

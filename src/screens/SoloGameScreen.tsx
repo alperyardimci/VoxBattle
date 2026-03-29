@@ -376,19 +376,21 @@ export default function SoloGameScreen({ route, navigation }: Props) {
   return (
     <View style={styles.container}>
       {/* Floating particles */}
-      {bgParticles.map((p, i) => (
-        <Animated.View
-          key={i}
-          style={[
-            styles.particle,
-            {
-              transform: [{ translateX: p.x }, { translateY: p.y }],
-              opacity: p.opacity,
-              backgroundColor: i % 2 === 0 ? "#e94560" : "#0f3460",
-            },
-          ]}
-        />
-      ))}
+      <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+        {bgParticles.map((p, i) => (
+          <Animated.View
+            key={i}
+            style={[
+              styles.particle,
+              {
+                transform: [{ translateX: p.x }, { translateY: p.y }],
+                opacity: p.opacity,
+                backgroundColor: i % 2 === 0 ? "#e94560" : "#0f3460",
+              },
+            ]}
+          />
+        ))}
+      </View>
 
       {/* Header Stats */}
       <View style={styles.header}>
@@ -468,6 +470,7 @@ export default function SoloGameScreen({ route, navigation }: Props) {
       {/* Feedback */}
       {feedback && (
         <Animated.View
+          pointerEvents="none"
           style={[
             styles.feedbackContainer,
             {
@@ -499,6 +502,7 @@ export default function SoloGameScreen({ route, navigation }: Props) {
       <View style={styles.micArea}>
         {/* Glow ring behind mic */}
         <Animated.View
+          pointerEvents="none"
           style={[
             styles.micGlow,
             isRecording

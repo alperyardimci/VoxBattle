@@ -157,20 +157,22 @@ export default function LobbyScreen({ route, navigation }: Props) {
   return (
     <View style={styles.container}>
       {/* Particles */}
-      {particles.map((p, i) => (
-        <Animated.View
-          key={i}
-          style={{
-            position: "absolute",
-            width: p.size,
-            height: p.size,
-            borderRadius: p.size / 2,
-            backgroundColor: i % 2 === 0 ? "#e94560" : "#0f3460",
-            transform: [{ translateX: p.x }, { translateY: p.y }],
-            opacity: p.opacity,
-          }}
-        />
-      ))}
+      <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+        {particles.map((p, i) => (
+          <Animated.View
+            key={i}
+            style={{
+              position: "absolute",
+              width: p.size,
+              height: p.size,
+              borderRadius: p.size / 2,
+              backgroundColor: i % 2 === 0 ? "#e94560" : "#0f3460",
+              transform: [{ translateX: p.x }, { translateY: p.y }],
+              opacity: p.opacity,
+            }}
+          />
+        ))}
+      </View>
 
       {/* Globe + Title */}
       <Animated.View style={[styles.globeWrap, { transform: [{ rotate: spin }] }]}>
